@@ -66,7 +66,7 @@ class ServicesController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([
-        'servicename'       => 'required|max:50',
+        'servicename'       => 'required|unique:services|max:50',
         'serviceprice'      => 'required|integer',
         'serviceduration'   => 'required|integer',
         'servicetype'       => 'required'

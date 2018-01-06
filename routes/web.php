@@ -54,6 +54,12 @@ Route::resource('services', 'ServicesController'); //customer routes
 Route::resource('appointments', 'AppointmentsController'); //customer routes
 Route::resource('registercustomer', 'RegisterCustomerController');
 
+//appointments -- reschedule
+Route::get('appointments/{appointment}/rescheduleform', 'AppointmentsController@rescheduleform')->name('appointments.rescheduleform');
+Route::patch('appointments/{appointment}', 'AppointmentsController@reschedule')->name('appointments.reschedule');
+Route::patch('appointments/{appointment}', 'AppointmentsController@cancel')->name('appointments.cancel');
+
+//workerappointments
 Route::get('workers/{workerId}/appointments', 'WorkerAppointmentController@index');
 
 

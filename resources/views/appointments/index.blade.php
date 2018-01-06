@@ -22,13 +22,15 @@
 			<td>Customer</td>
 			<td>Worker</td>
 			<td>Service</td>
+      <td>Status</td>
 			<td>Actions</td>
 		</tr>
 	</thead>
 </table>
 
+  <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="viewmodal"></div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="addmodal"></div>
-  <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="editmodal"></div>
+  <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="reschedulemodal"></div>
 
 <script type="text/javascript">
 	$(function() {
@@ -43,6 +45,7 @@
                 {data: 'customername', name: 'customername', className: 'col-md-1 text-left'},
                 {data: 'workername', name: 'workername', className: 'col-md-1 text-left'},
                 {data: 'service', name: 'service', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'status', name: 'status', className: 'col-md-1 text-left', orderable: false,},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false, searchable: false}
             ],
         });
@@ -60,26 +63,39 @@
               }); 
         });
 
-        $(document).off('click','.edit-data-btn').on('click','.edit-data-btn', function(e){
+        $(document).off('click','.view-data-btn').on('click','.view-data-btn', function(e){
           e.preventDefault();
           var that = this; 
-          $("#editmodal").html('');
-          $("#editmodal").modal();
+          $("#viewmodal").html('');
+          $("#viewmodal").modal();
           $.ajax({
-            url: '/users/'+that.dataset.id+'/edit',         
+            url: '/appointments/'+that.dataset.id+'',         
             success: function(data) {
-              $("#editmodal").html(data);
+              $("#viewmodal").html(data);
+            }
+          }); 
+        });
+
+        $(document).off('click','.reschedule-data-btn').on('click','.reschedule-data-btn', function(e){
+          e.preventDefault();
+          var that = this; 
+          $("#reschedulemodal").html('');
+          $("#reschedulemodal").modal();
+          $.ajax({
+            url: '/appointments/'+that.dataset.id+'/rescheduleform',         
+            success: function(data) {
+              $("#reschedulemodal").html(data);
             }
           }); 
         });
         
-        $(document).off('click','.delete-data-btn').on('click','.delete-data-btn', function(e){
+        $(document).off('click','.cancel-data-btn').on('click','.cancel-data-btn', function(e){
           e.preventDefault();
           var that = this; 
                 bootbox.confirm({
-                  title: "Confirm Delete Data?",
+                  title: "Confirm Appointment Cancellation?",
                   className: "del-bootbox",
-                  message: "Are you sure you want to delete record?",
+                  message: "Are you sure you want to cancel appointment?",
                   buttons: {
                       confirm: {
                           label: 'Yes',
@@ -92,13 +108,13 @@
                   },
                   callback: function (result) {
                      if(result){
-                      var token = '{{csrf_token()}}'; 
+                      //var token = '{{csrf_token()}}'; 
                       $.ajax({
-                      url:'/users/'+that.dataset.id,
-                      type: 'post',
-                      data: {_method: 'delete', _token :token},
+                      url:'/appointments/'+that.dataset.id,
+                      type: 'PATCH',
+                      //data: {_method: 'delete', _token :token},
                       success:function(result){
-                        $("#users-table").DataTable().ajax.url( '/users/get_datatable' ).load();
+                        $("#appointments-table").DataTable().ajax.url( '/appointments/get_datatable' ).load();
                         if(result.success){
                         swal({
                             title: result.msg,

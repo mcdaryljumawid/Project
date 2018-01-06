@@ -38,7 +38,7 @@
                         <li><a href="{{ url('/workers') }}">Workers</a>
                         <li><a href="{{ url('/customers') }}">Customers</a>
                         <li><a href="{{ url('/services') }}">Services</a>
-                        <li><a href="appointment.php">Appointment</a>
+                        <li><a href="{{ url('/appointments') }}">Appointment</a>
                         <li><a href="transaction_and_bill.php">Transaction and Bill</a>
                         <li><a href="gross_income.php">Gross Income</a>
                         <li><a href="generatereport.php">Generate Reports</a>

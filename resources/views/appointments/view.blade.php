@@ -2,53 +2,42 @@
       	<!-- Modal content-->
       		<div class="modal-content">
         		<div class="modal-header" style="background-color: #808080;color: #fff;">
-          			<h4 class="modal-title" align="center">WORKER DETAILS</h4>
+          			<h4 class="modal-title" align="center">APPOINTMENT DETAILS</h4>
         		</div>
 
         		<div class="form-group">
-        			<div class="modal-body" align="left" style="padding-left: 170px"> 
-							
-							<div class="col-sm-4"><strong>First Name:</strong></div> 
-							<div class="col=sm-7">{{$worker->workerfname}}</div>
+        			<div class="modal-body" align="left" style="padding-left: 50px"> 
+							<div class="col-sm-4"><strong>Date and Time:</strong></div> 
+							<div class="col-sm-5">{{ date('Y-m-d h:i:s', strtotime($appointment->appointDateTime)) }}</div>
 
-							<div class="col-sm-4"><strong>Middle Name:</strong></div> 
-							<div class="col=sm-7">{{$worker->workermname}}</div>
+							<div class="col-sm-4"><strong>Re-schedule until:</strong></div> 
+							<div class="col-sm-7">{{ date('Y-m-d h:i:s', strtotime($appointment->datetimeResched)) }}</div>
 
-							<div class="col-sm-4"><strong>Last Name:</strong></div> 
-							<div class="col=sm-7">{{$worker->workerlname}}</div>
+							<br><br><br>
 
-							<br>
+							<div class="col-sm-4"><strong><i>Customer</i></strong></div><br>
+							<div class="col-sm-4"><strong>Lastname:</strong></div> 
+							<div class="col-sm-7">{{$appointment->customer->custlname}}</div>
 
-							<div class="col-sm-4"><strong>Date of Birth:</strong></div> 
-							<div class="col=sm-7">{{$worker->workerdbirth}}</div>
+							<div class="col-sm-4"><strong>Firstname:</strong></div> 
+							<div class="col-sm-7">{{$appointment->customer->custfname}}</div>
 
-							<div class="col-sm-4"><strong>Gender:</strong></div> 
-							<div class="col=sm-7">{{$worker->workergender}}</div>
+							<br><br><br>
 
-							<div class="col-sm-4"><strong>Marital Status:</strong></div> 
-							<div class="col=sm-7">{{$worker->workermaritalStatus}}</div>
+							<div class="col-sm-4"><strong><i>Worker Assigned</i></strong></div><br>
+							<div class="col-sm-4"><strong>Lastname:</strong></div> 
+							<div class="col-sm-7">{{$appointment->worker->workerlname}}</div>
 
-							<div class="col-sm-4"><strong>Contact No:</strong></div> 
-							<div class="col=sm-7">{{$worker->workerContactNo}}</div>
+							<div class="col-sm-4"><strong>Firstname:</strong></div> 
+							<div class="col-sm-7">{{$appointment->worker->workerfname}}</div>
 
-							<br>
+							<br><br><br>
 
-							<div class="col-sm-4"><strong>Barangay:</strong></div> 
-							<div class="col=sm-7">{{$worker->workerbrgy}}</div>
-
-							<div class="col-sm-4"><strong>Town:</strong></div> 
-							<div class="col=sm-7">{{$worker->workertown}}</div>
-
-							<div class="col-sm-4"><strong>Province:</strong></div> 
-							<div class="col=sm-7">{{$worker->workerprovince}}</div>
-						
-							<br>
-
-							<div class="col-sm-4"><strong>Level:</strong></div> 
-							<div class="col=sm-7">{{$worker->workerlevel}}</div>
-
-							<div class="col-sm-4"><strong>Type:</strong></div> 
-							<div class="col=sm-7">{{$worker->workertype}}</div>
+							<div class="col-sm-4"><strong><i>Service availed</i></strong></div> <br>
+							<div class="col-sm-4"><strong>Service:</strong></div> 
+							<div class="col-sm-7">{{$appointment->service->servicename}}</div>
+							<div class="col-sm-4"><strong>Price:</strong></div> 
+							<div class="col-sm-7">{{$appointment->service->serviceprice}}</div>	<br>
 						</div>	
 					</div>
 				</div>

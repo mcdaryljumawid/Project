@@ -41,7 +41,7 @@ class AppointmentsController extends Controller
             return $appointment->id;
         })
         ->addColumn('datetime', function($appointment){
-            return date('M d, Y h:i A', strtotime($appointment->datetimeResched));
+            return date('M d, Y h:i A', strtotime($appointment->appointDateTime));
         })
         ->addColumn('customername', function($appointment){
             return $appointment->customer->custlname.", ".$appointment->customer->custfname;
@@ -52,15 +52,18 @@ class AppointmentsController extends Controller
         ->addColumn('service', function($appointment){
             return $appointment->service->servicename;
         })
+        ->addColumn('status', function($appointment){
+            return $appointment->appointStatus;
+        })
         ->addColumn('action', function ($appointment){
             return '
-                    <button title="View Appointment Details" class="btn btn-warning edit-data-btn" data-id="'.$appointment->id.'">
+                    <button title="View Appointment Details" class="btn btn-primary view-data-btn" data-id="'.$appointment->id.'">
                         <span class="glyphicon glyphicon-search"></span>
                     </button>
-                    <button title="Re-schedule appointment" class="btn btn-danger delete-data-btn" data-id="'.$appointment->id.'">
+                    <button title="Re-schedule appointment" class="btn btn-warning reschedule-data-btn" data-id="'.$appointment->id.'">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </button>
-                    <button title="Cancel appointment" class="btn btn-danger delete-data-btn" data-id="'.$appointment->id.'">
+                    <button title="Cancel appointment" class="btn btn-danger cancel-data-btn" data-id="'.$appointment->id.'">
                         <span class="glyphicon glyphicon-remove-circle"></span>
                     </button>';
         })
@@ -121,6 +124,51 @@ class AppointmentsController extends Controller
             return response()->json(['success' => true, 'msg' => 'Appointment Successfully Booked!']);
         }else{
             return response()->json(['success' => false, 'msg' => 'An error occured while booking appointment!']);
+        }
+    }
+
+    public function rescheduleform($id)
+    {
+        $appointment = Appointment::findorFail($id);
+
+        return view('appointments.rescheduleform')->with('appointment',$appointment);
+    }
+
+
+    public function reschedule(Request $request, $id)
+    {
+        $formattedDate = date('Y-m-d h:i:s', strtotime($request->appointDateTime));
+
+        $dy = date('Y', strtotime($formattedDate));
+        $dm = date('m', strtotime($formattedDate));
+        $dd = date('d', strtotime($formattedDate));
+        $dh = date('h', strtotime($formattedDate));
+        $dm = date('i', strtotime($formattedDate));
+        $ds = date('s', strtotime($formattedDate));
+
+        //return $formattedDate;
+        $dt = Carbon::create($dy,$dm,$dd,$dh,$dm,$ds);
+        //return $dt;
+        $final = $dt->subHours(3);
+
+         if(Appointment::find($id)->update([
+            'appointDateTime' => date('Y-m-d h:i:s', strtotime($request->appointDateTime)),
+            'datetimeResched' => $final,
+         ])){
+            return response()->json(['success' => true, 'msg' => 'Appointment successfully re-scheduled!']);
+        }else{
+            return response()->json(['success' => false, 'msg' => 'An error occured while re-scheduling service!']);
+        }
+    }
+
+    public function cancel($id)
+    {
+        if(Appointment::find($id)->update([
+            'appointStatus' => "Cancelled",
+         ])){
+            return response()->json(['success' => true, 'msg' => 'Appointment successfully cancelled!']);
+        }else{
+            return response()->json(['success' => false, 'msg' => 'An error occured while cancelling service!']);
         }
     }
 
