@@ -34,7 +34,7 @@ class AppointmentsController extends Controller
 
     public function get_datatable()
     {
-        $appointments = \App\Appointment::all();
+        $appointments = \App\Appointment::where('appointStatus', "Pending");
 
         return Datatables::of($appointments)
         ->addColumn('id', function($appointment){
@@ -70,6 +70,38 @@ class AppointmentsController extends Controller
         ->make(true);
     }
 
+    public function get_datatable_appointhistory()
+    {
+        $appointments = \App\Appointment::where('appointStatus', ["Cancelled","Closed"]);
+
+        return Datatables::of($appointments)
+        ->addColumn('id', function($appointment){
+            return $appointment->id;
+        })
+        ->addColumn('datetime', function($appointment){
+            return date('M d, Y h:i A', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('customername', function($appointment){
+            return $appointment->customer->custlname.", ".$appointment->customer->custfname;
+        })
+        ->addColumn('workername', function($appointment){
+            return $appointment->worker->workerlname.", ".$appointment->worker->workerfname;
+        })
+        ->addColumn('service', function($appointment){
+            return $appointment->service->servicename;
+        })
+        ->addColumn('status', function($appointment){
+            return $appointment->appointStatus;
+        })
+        ->addColumn('action', function ($appointment){
+            return '
+                    <button title="View Appointment Details" class="btn btn-primary view-data-btn" data-id="'.$appointment->id.'">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>';
+        })
+        ->make(true);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -92,6 +124,8 @@ class AppointmentsController extends Controller
      */
     public function store(Request $request)
     {
+        $yesterday = Carbon::now()->subDays(1)->toDateString();
+
         $data = request()->validate([
         'appointDateTime'       => 'required',
         'appointRemarks'        => 'nullable',
@@ -105,9 +139,10 @@ class AppointmentsController extends Controller
         $dd = date('d', strtotime($request->appointDateTime));
         $dh = date('h', strtotime($request->appointDateTime));
         $dm = date('i', strtotime($request->appointDateTime));
-        $ds = date('s', strtotime($request->appointDateTime));
+        //$ds = date('s', strtotime($request->appointDateTime));
+        $dt = Carbon::create($dy,$dm,$dd,$dh,$dm);
 
-        $dt = Carbon::create($dy,$dm,$dd,$dh,$dm,$ds);
+        
 
             $apt = new \App\Appointment;
             $apt->appointDateTime    =  date('Y-m-d h:i:s', strtotime($request->appointDateTime));
@@ -144,10 +179,10 @@ class AppointmentsController extends Controller
         $dd = date('d', strtotime($formattedDate));
         $dh = date('h', strtotime($formattedDate));
         $dm = date('i', strtotime($formattedDate));
-        $ds = date('s', strtotime($formattedDate));
+        //$ds = date('s', strtotime($formattedDate));
 
         //return $formattedDate;
-        $dt = Carbon::create($dy,$dm,$dd,$dh,$dm,$ds);
+        $dt = Carbon::create($dy,$dm,$dd,$dh,$dm);
         //return $dt;
         $final = $dt->subHours(3);
 
@@ -161,10 +196,24 @@ class AppointmentsController extends Controller
         }
     }
 
-    public function cancel($id)
+    public function cancelform($id)
     {
+        $appointment = Appointment::findorFail($id);
+
+        return view('appointments.cancelform')->with('appointment',$appointment);
+    }
+
+
+
+    public function cancel(Request $request, $id)
+    {
+        $data = request()->validate([
+        'appointRemarks' => 'required',
+        ]);
+
         if(Appointment::find($id)->update([
             'appointStatus' => "Cancelled",
+            'appointRemarks' => $request->appointRemarks,
          ])){
             return response()->json(['success' => true, 'msg' => 'Appointment successfully cancelled!']);
         }else{

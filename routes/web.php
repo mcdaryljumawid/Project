@@ -45,6 +45,7 @@ Route::get('/workers/get_datatable', 'WorkersController@get_datatable')->name('w
 Route::get('/customers/get_datatable', 'CustomersController@get_datatable')->name('customers.get_datatable');
 Route::get('/services/get_datatable', 'ServicesController@get_datatable')->name('services.get_datatable');
 Route::get('/appointments/get_datatable', 'AppointmentsController@get_datatable')->name('appointments.get_datatable');
+Route::get('/appointments/get_datatable_appointhistory', 'AppointmentsController@get_datatable_appointhistory')->name('appointments.get_datatable_appointhistory');
 
 //crudroutes
 Route::resource('users', 'UsersController'); //user routes
@@ -57,7 +58,10 @@ Route::resource('registercustomer', 'RegisterCustomerController');
 //appointments -- reschedule
 Route::get('appointments/{appointment}/rescheduleform', 'AppointmentsController@rescheduleform')->name('appointments.rescheduleform');
 Route::patch('appointments/{appointment}', 'AppointmentsController@reschedule')->name('appointments.reschedule');
-Route::patch('appointments/{appointment}', 'AppointmentsController@cancel')->name('appointments.cancel');
+//appointments -- cancel
+Route::get('appointments/{appointment}/cancelform', 'AppointmentsController@cancelform')->name('appointments.cancelform');
+Route::patch('appointments/{appointment}/cancel', 'AppointmentsController@cancel')->name('appointments.cancel');
+//Route::patch('appointments/{appointment}', 'AppointmentsController@cancel')->name('appointments.cancel');
 
 //workerappointments
 Route::get('workers/{workerId}/appointments', 'WorkerAppointmentController@index');

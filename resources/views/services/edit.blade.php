@@ -40,6 +40,21 @@
                             </div>
                         </div>
 
+                         <div class="form-group">
+                            <label class ="control-label col-sm-4">Service Category</label>
+                            <div class="col-sm-7">
+                            	<select class="select form-control " id="servicecategory" name="servicecategory" style="width: 200px">
+                                	<option value="Hair" {{$service->servicecategory == 'Hair' ? 'selected':''}}>Hair</option>
+                                    <option value="Threading" {{$service->servicecategory == 'Threading' ? 'selected':''}}>Threading</option>
+                                    <option value="Nails" {{$service->servicecategory == 'Nails' ? 'selected':''}}>Nails</option>
+                                    <option value="SPA" {{$service->servicecategory == 'SPA' ? 'selected':''}}>SPA</option>
+                                    <option value="Eyelash" {{$service->servicecategory == 'Eyelash' ? 'selected':''}}>Eyelash</option>
+                                    <option value="Waxing" {{$service->servicecategory == 'Waxing' ? 'selected':''}}>Waxing</option>
+                                    <option value="Massage" {{$service->servicecategory == 'Massage' ? 'selected':''}}>Massage</option>
+                                </select>
+                            </div>
+                        </div>
+
 		        		<div class="modal-footer">
 		        			<div align="center">
 								<div class="update-btn btn btn-success">Update Service</div>

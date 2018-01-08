@@ -190,10 +190,14 @@ class WorkersController extends Controller
      */
     public function destroy($id)
     {
+        try{
         if(Worker::destroy($id)){
             return response()->json(['success' => true, 'msg' => 'Worker Successfully deleted!']);
         }else{
             return response()->json(['success' => false, 'msg' => 'An error occured while deleting worker!']);
+        }
+        }catch (\Illuminate\Database\QueryException $e){
+            return response()->json(['success' => false, 'msg' => 'Worker cannot be deleted!']);
         }
     }
 }

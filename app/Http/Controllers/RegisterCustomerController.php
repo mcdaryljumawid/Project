@@ -43,37 +43,37 @@ class RegisterCustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $data = request()->validate([
         'custfname' => 'required|max:25',
         'custmname' => 'required|max:25',
         'custlname' => 'required|max:25',
         'custContactNo' => 'required|unique:customers|min:11|size:11',
         'email' => 'required|unique:customers|email',
         'custUsername' => 'required|unique:customers|max:25',
-        'password' => 'required|min:6|max:50',
+        'custgender' => 'required',
+        'password' => 'required|min:6|max:20|same:confirm_password'
         ]);
 
-        if($validator->fails())
-        {
-            return back()
-            ->withErrors($validator)
-            ->withInput();
+        if($data['password']){
+            $data['password'] = bcrypt($data['password']);          
         }
-        else
-        {
-            Customer::create([
-            'custfname' => ucfirst($request->custfname),
-            'custlname' => ucfirst($request->custlname),
-            'custmname' => ucfirst($request->custmname),
-            'custgender' => $request->custgender,
-            'custContactNo' => $request->custContactNo,
-            'email' => $request->email,
-            'custUsername' => $request->custUsername,
-            'password' => bcrypt($request->password)
-            ]);
 
-        Session::flash("Successfully registered!");
-        return redirect('/registercustomer');
+        if($data['custfname']){
+            $data['custfname'] = ucfirst($data['custfname']);          
+        }
+
+        if($data['custmname']){
+            $data['custmname'] = ucfirst($data['custmname']);          
+        }
+
+        if($data['custlname']){
+            $data['custlname'] = ucfirst($data['custlname']);          
+        }
+
+        if(\App\Customer::create($data)){
+            return response()->json(['success' => true, 'msg' => 'Registration successful!']);
+        }else{
+            return response()->json(['success' => false, 'msg' => 'Registration failed!']);
         }
     }
 

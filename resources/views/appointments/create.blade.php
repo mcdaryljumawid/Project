@@ -20,7 +20,6 @@
 					  		</div>
 						</div>
 
-
 						<div class="form-group">
                             <label class ="control-label col-sm-4">Customer</label>
                             <div class="col-sm-7">
@@ -101,5 +100,5 @@
 	          }
 	        });
 		});
-	 });  
+	 }); 
 </script>

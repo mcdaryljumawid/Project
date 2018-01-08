@@ -23,11 +23,9 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <ul class="nav navbar-nav">
                     @if (Auth::guard('customer')->check())
-                        <li><a href="appointment.php">Dashboard</a>
+                        <li><a href="{{ url('/customer') }}">Dashboard</a>
                         <li><a href="appointment.php">My Appointments</a>
                         <li><a href="transaction_and_bill.php">My Transactions</a>
-                        <li><a href="gross_income.php"></a>
-                        <li><a href="generatereport.php">Generate Reports</a>
                     @elseif (Auth::guard('worker')->check())
                         <li><a href="appointment.php">My Appointments</a>
                         <li><a href="transaction_and_bill.php">My Transactions</a>

@@ -200,10 +200,14 @@ class CustomersController extends Controller
      */
     public function destroy($id)
     {
+        try{
         if(Customer::destroy($id)){
             return response()->json(['success' => true, 'msg' => 'Customer Successfully deleted!']);
         }else{
             return response()->json(['success' => false, 'msg' => 'An error occured while deleting data!']);
+        }
+        }catch (\Illuminate\Database\QueryException $e){
+            return response()->json(['success' => false, 'msg' => 'Customer cannot be deleted!']);
         }
     }
 }

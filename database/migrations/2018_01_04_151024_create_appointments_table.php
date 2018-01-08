@@ -18,7 +18,7 @@ class CreateAppointmentsTable extends Migration
             $table->datetime('appointDateTime');
             $table->datetime('datetimeResched');
             $table->enum('appointStatus', ['Pending','Cancelled','Closed']);
-            $table->string('appointRemarks', 150);
+            $table->text('appointRemarks');
             $table->timestamps();
             $table->integer('service_id')->unsigned();
             $table->integer('worker_id')->unsigned();

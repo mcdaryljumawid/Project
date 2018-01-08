@@ -23,6 +23,7 @@
 			  <td>Service name</td>
 			  <td>Price</td>
 			  <td>Duration (minutes)</td>
+        <td>Category</td>
         <td>Actions</td>
 		</tr>
 	</thead>
@@ -40,16 +41,38 @@
             ajax: '/services/get_datatable',
             columns: [
                 {data: 'id', name: 'id', className: 'col-md-1 text-left'},
-                {data: 'servicetype', name: 'servicetype', className: 'col-md-1 text-left'},
+                {data: 'servicetype', name: 'servicetype', className: 'col-md-1 text-left', orderable: false},
                 {data: 'servicename', name: 'servicename', className: 'col-md-1 text-left'},
                 {data: 'serviceprice', name: 'serviceprice', className: 'col-md-1 text-left'},
                 {data: 'serviceduration', name: 'serviceduration', className: 'col-md-1 text-left'},
+                {data: 'servicecategory', name: 'servicecategory', className: 'col-md-1 text-left'},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false, searchable: false}
             ],
             initComplete: function () {
             this.api().columns(1).every( function () {
                 var column = this;
                 var select = $('<select><option value="">Service Type</option></select>')
+                    .appendTo( $(column.header()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+        },
+
+        initComplete: function () {
+            this.api().columns(5).every( function () {
+                var column = this;
+                var select = $('<select><option value="">Service Category</option></select>')
                     .appendTo( $(column.header()).empty() )
                     .on( 'change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(

@@ -43,6 +43,21 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class ="control-label col-sm-4">Service Category</label>
+                            <div class="col-sm-7">
+                            	<select class="select form-control " id="servicecategory" name="servicecategory" style="width: 200px">
+                                	<option value="Hair">Hair</option>
+                                    <option value="Threading">Threading</option>
+                                    <option value="Nails">Nails</option>
+                                    <option value="SPA">SPA</option>
+                                    <option value="Eyelash">Eyelash</option>
+                                    <option value="Waxing">Waxing</option>
+                                    <option value="Massage">Massage</option>
+                                </select>
+                            </div>
+                        </div>
+
 		        		<div class="modal-footer">
 		        			<div align="center">
 								<div class="submit-btn btn btn-success">Add Service</div>

@@ -16,9 +16,11 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->increments('id');
             $table->string('servicename', 50);
-            $table->float('serviceprice');
+            $table->float('serviceprice', 6,2);
             $table->smallinteger('serviceduration');
             $table->enum('servicetype', ['Major', 'Minor']);
+            $table->enum('servicecategory', ['Hair', 'Threading', 'Nails', 'SPA', 'Eyelash', 'Waxing', 'Massage']);
+            
             $table->timestamps();
         });
     }
