@@ -46,13 +46,16 @@ Route::get('/customers/get_datatable', 'CustomersController@get_datatable')->nam
 Route::get('/services/get_datatable', 'ServicesController@get_datatable')->name('services.get_datatable');
 Route::get('/appointments/get_datatable', 'AppointmentsController@get_datatable')->name('appointments.get_datatable');
 Route::get('/appointments/get_datatable_appointhistory', 'AppointmentsController@get_datatable_appointhistory')->name('appointments.get_datatable_appointhistory');
+Route::get('/transactions/get_datatable', 'TransactionsController@get_datatable')->name('transactions.get_datatable');
 
 //crudroutes
 Route::resource('users', 'UsersController'); //user routes
 Route::resource('workers', 'WorkersController'); //worker routes
 Route::resource('customers', 'CustomersController'); //customer routes
 Route::resource('services', 'ServicesController'); //customer routes
-Route::resource('appointments', 'AppointmentsController'); //customer routes
+Route::resource('appointments', 'AppointmentsController');	//appointmentroutes
+Route::resource('transactions', 'TransactionsController');  //transactionroutes
+Route::resource('transactiondetails', 'TransactionDetailsController'); //transactiondetails
 Route::resource('registercustomer', 'RegisterCustomerController');
 
 //appointments -- reschedule
@@ -62,6 +65,9 @@ Route::patch('appointments/{appointment}', 'AppointmentsController@reschedule')-
 Route::get('appointments/{appointment}/cancelform', 'AppointmentsController@cancelform')->name('appointments.cancelform');
 Route::patch('appointments/{appointment}/cancel', 'AppointmentsController@cancel')->name('appointments.cancel');
 //Route::patch('appointments/{appointment}', 'AppointmentsController@cancel')->name('appointments.cancel');
+//transaction add transaction details
+Route::get('transactions/{transaction}/adddetailsform', 'TransactionsController@adddetailsform')->name('transactions.adddetailsform');
+Route::patch('transactions/{transaction}/adddetails', 'TransactionsController@adddetails')->name('transactions.adddetails');
 
 //workerappointments
 Route::get('workers/{workerId}/appointments', 'WorkerAppointmentController@index');

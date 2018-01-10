@@ -14,4 +14,9 @@ class Service extends Model
     {
     	return $this->hasMany('App\Appointment');
     }
+
+    public function transactiondetails()
+    {
+    	return $this->hasMany('App\TransactionDetail');
+    }
 }

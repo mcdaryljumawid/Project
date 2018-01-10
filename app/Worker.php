@@ -29,4 +29,15 @@ class Worker extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function appointments()
+    {
+        return $this->hasMany('App\Appointment');
+    }
+
+    public function transactiondetails()
+    {
+        return $this->hasMany('App\TransactionDetail');
+    }
+
 }

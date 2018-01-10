@@ -124,29 +124,30 @@ class AppointmentsController extends Controller
      */
     public function store(Request $request)
     {
-        $yesterday = Carbon::now()->subDays(1)->toDateString();
-
+        //$yesterday = Carbon::now()->subDays(1)->toDateString();
+        $yesterday = date('Y-m-d h:i:s', strtotime('-24 hours', strtotime('now')));
         $data = request()->validate([
-        'appointDateTime'       => 'required',
+        'appointDateTime'       => 'required', //|after:'.$yesterday.'',
         'appointRemarks'        => 'nullable',
         'service_id'            => 'required',
         'worker_id'             => 'required',
         'customer_id'           => 'required',
+        'agree'                 => 'required',
         ]);
 
-        $dy = date('Y', strtotime($request->appointDateTime));
-        $dm = date('m', strtotime($request->appointDateTime));
-        $dd = date('d', strtotime($request->appointDateTime));
-        $dh = date('h', strtotime($request->appointDateTime));
-        $dm = date('i', strtotime($request->appointDateTime));
+       // $dy = date('Y', strtotime($request->appointDateTime));
+        // $dm = date('m', strtotime($request->appointDateTime));
+        //$dd = date('d', strtotime($request->appointDateTime));
+        //$dh = date('h', strtotime($request->appointDateTime));
+        //$dm = date('i', strtotime($request->appointDateTime));
         //$ds = date('s', strtotime($request->appointDateTime));
-        $dt = Carbon::create($dy,$dm,$dd,$dh,$dm);
+        //$dt = Carbon::create($dy,$dm,$dd,$dh,$dm);
 
-        
+
 
             $apt = new \App\Appointment;
-            $apt->appointDateTime    =  date('Y-m-d h:i:s', strtotime($request->appointDateTime));
-            $apt->datetimeResched    =  $dt->subHours(3);
+            $apt->appointDateTime    =  $request->appointDateTime;
+            $apt->datetimeResched    =  date('Y-m-d h:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
             $apt->appointStatus      =  "Pending";
             $apt->appointRemarks     =  "";           
             //$apt->appointRemarks     =  $request->appointRemarks;
@@ -172,23 +173,10 @@ class AppointmentsController extends Controller
 
     public function reschedule(Request $request, $id)
     {
-        $formattedDate = date('Y-m-d h:i:s', strtotime($request->appointDateTime));
-
-        $dy = date('Y', strtotime($formattedDate));
-        $dm = date('m', strtotime($formattedDate));
-        $dd = date('d', strtotime($formattedDate));
-        $dh = date('h', strtotime($formattedDate));
-        $dm = date('i', strtotime($formattedDate));
-        //$ds = date('s', strtotime($formattedDate));
-
-        //return $formattedDate;
-        $dt = Carbon::create($dy,$dm,$dd,$dh,$dm);
-        //return $dt;
-        $final = $dt->subHours(3);
-
+        $minus = date('Y-m-d h:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
          if(Appointment::find($id)->update([
-            'appointDateTime' => date('Y-m-d h:i:s', strtotime($request->appointDateTime)),
-            'datetimeResched' => $final,
+            'appointDateTime' => $request->appointDateTime,
+            'datetimeResched' => $minus,
          ])){
             return response()->json(['success' => true, 'msg' => 'Appointment successfully re-scheduled!']);
         }else{
@@ -266,5 +254,13 @@ class AppointmentsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function messages()
+    {
+        return [
+            'appointDateTime.after' => 'Date should be today or the next day!',
+            'body.required'  => 'A message is required',
+        ];
     }
 }

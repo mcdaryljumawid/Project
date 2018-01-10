@@ -8,10 +8,10 @@
         		<div class="form-group">
         			<div class="modal-body" align="left" style="padding-left: 50px"> 
 							<div class="col-sm-4"><strong>Date and Time:</strong></div> 
-							<div class="col-sm-5">{{ date('Y-m-d h:i:s', strtotime($appointment->appointDateTime)) }}</div>
+							<div class="col-sm-5">{{ date('M d, Y h:i A', strtotime($appointment->appointDateTime)) }}</div>
 
 							<div class="col-sm-4"><strong>Re-schedule until:</strong></div> 
-							<div class="col-sm-7">{{ date('Y-m-d h:i:s', strtotime($appointment->datetimeResched)) }}</div>
+							<div class="col-sm-7">{{ date('M d, Y h:i A', strtotime($appointment->datetimeResched)) }}</div>
 
 							<br><br><br>
 
