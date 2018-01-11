@@ -85,12 +85,12 @@
         });
 
         $(document).off('click','.add-details-btn').on('click','.add-details-btn', function(e){
-          e.preventDefault();
+          e.preventDefault(); 
           var that = this; 
           $("#add-transaction-details").html('');
           $("#add-transaction-details").modal();
           $.ajax({
-            url: '/transactiondetails/create',      
+            url: '/transactions/'+that.dataset.id+'/adddetailsform',      
             success: function(data) {
               $("#add-transaction-details").html(data);
             }

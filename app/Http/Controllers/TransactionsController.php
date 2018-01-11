@@ -121,10 +121,11 @@ class TransactionsController extends Controller
 
     public function adddetailsform($id)
     {
+        $transaction = Transaction::findorFail($id);
         $services = Service::all();
         $workers = Worker::all();
 
-        return view('transactiondetails.create', compact(['services', 'workers']));
+        return view('transactions.adddetailsform', compact(['services', 'workers', 'transaction']));
     }
 
     public function adddetails(Request $request, $id)
@@ -138,8 +139,8 @@ class TransactionsController extends Controller
          $transactiondetails->workergrossincome = 0;
          $transactiondetails->companygrossincome = 0; 
          $transactiondetails->worker_id = $request->worker_id;
-         $transactiondetails->service_id = $request->customer_id;
-         $transactiondetails->transaction_id = $this->$id;
+         $transactiondetails->service_id = $request->service_id;
+         $transactiondetails->transaction_id = $request->transaction_id;
 
          if($transactiondetails->save()){
             return response()->json(['success' => true, 'msg' => 'Transaction Details Successfully Created!']);
