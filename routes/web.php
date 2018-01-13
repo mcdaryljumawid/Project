@@ -56,7 +56,7 @@ Route::resource('services', 'ServicesController'); //customer routes
 Route::resource('appointments', 'AppointmentsController');	//appointmentroutes
 Route::resource('transactions', 'TransactionsController');  //transactionroutes
 Route::resource('transactiondetails', 'TransactionDetailsController'); //transactiondetails
-Route::resource('registercustomer', 'RegisterCustomerController');
+Route::resource('registercustomer', 'RegisterCustomerController'); //registercustomerroute
 
 //appointments -- reschedule
 Route::get('appointments/{appointment}/rescheduleform', 'AppointmentsController@rescheduleform')->name('appointments.rescheduleform');
@@ -68,8 +68,19 @@ Route::patch('appointments/{appointment}/cancel', 'AppointmentsController@cancel
 //transaction add transaction details
 Route::get('transactions/{transaction}/adddetailsform', 'TransactionsController@adddetailsform')->name('transactions.adddetailsform');
 Route::patch('transactions/{transaction}/adddetails', 'TransactionsController@adddetails')->name('transactions.adddetails');
+//transactions
+Route::get('select-service/{data}', 'TransactionsController@selectService')->name('select-service');
+Route::get('select-worker/{data}', 'TransactionsController@selectWorker')->name('select-worker');
+
+//appointments
+Route::get('select-service-appointment/{data}', 'AppointmentsController@selectService')->name('select-service-appointment');
+Route::get('select-worker-appointment/{data}', 'AppointmentsController@selectWorker')->name('select-worker-appointment');
 
 //workerappointments
 Route::get('workers/{workerId}/appointments', 'WorkerAppointmentController@index');
+
+//getservice filtered
+Route::get('get_services_by_category/{category}', 'ServicesController@get_services_by_category');
+
 
 

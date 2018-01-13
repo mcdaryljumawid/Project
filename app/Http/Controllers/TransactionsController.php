@@ -116,7 +116,11 @@ class TransactionsController extends Controller
      */
     public function show($id)
     {
-        //
+        $transaction = Transaction::findorFail($id);
+
+        $transactiondetails = TransactionDetail::where('transaction_id', $id)->get();
+
+        return view('transactions.view', compact(['transaction', 'transactiondetails']));
     }
 
     public function adddetailsform($id)
@@ -146,6 +150,46 @@ class TransactionsController extends Controller
             return response()->json(['success' => true, 'msg' => 'Transaction Details Successfully Created!']);
         }else{
             return response()->json(['success' => false, 'msg' => 'An error occured while creating transaction details!']);
+        }
+    }
+
+    public function selectService(Request $request, $data)
+    {
+        if($request->ajax())
+        {
+            $services = \App\Service::where('servicecategory', $data)->get();
+            /*$data = ->render();
+            return response()->json(['options'=>$data]);*/
+            return  view('transactions.ajax-select',compact('services'));
+        }
+    }
+
+    public function selectWorker(Request $request, $data)
+    {
+        $types = ["All-around (Rebond specialized)","All-around (Haircut specialized)"];
+        if($request->ajax())
+        {
+            $service = Service::findorFail($data);
+
+            if($service->servicename === "Hair Cut (Men)")
+            {
+                $workers = Worker::where('workertype', "Barber")->get();
+            }
+            else if($service->servicename === "Rebond")
+            {
+                $workers = Worker::where('workertype', "All-around (Rebond specialized)")->get();
+            }
+            else if($service->servicename === "Hair Cut (Women)")
+            {
+                $workers = Worker::where('workertype', "All-around (Haircut specialized)")->get();
+            }
+            else
+            {
+                $workers = Worker::wherein('workertype', $types)->get();
+            }
+            /*$data = ->render();
+            return response()->json(['options'=>$data]);*/
+            return  view('transactions.ajax-select-worker',compact('workers'));
         }
     }
 

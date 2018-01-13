@@ -11,13 +11,25 @@
 					{{ csrf_field() }}
         			<div class="modal-body">
 
+        				 <div class="form-group">
+                            <label class ="control-label col-sm-4">Service Category</label>
+                            <div class="col-sm-7">
+                            	<select class="select form-control " id="select_servicecategory" name="servicecategory" style="width: 200px">
+                                	<option value="Hair">Hair</option>
+                                    <option value="Threading">Threading</option>
+                                    <option value="Nails">Nails</option>
+                                    <option value="SPA">SPA</option>
+                                    <option value="Eyelash">Eyelash</option>
+                                    <option value="Waxing">Waxing</option>
+                                    <option value="Massage">Massage</option>
+                                </select>
+                            </div>
+                        </div>
+
 						<div class="form-group">
                             <label class ="control-label col-sm-4">Service</label>
                             <div class="col-sm-7">
                             	<select class="select form-control " id="service_id" name="service_id" style="width: 200px">
-                            		@foreach($services as $service)
-                                		<option value="{{ $service->id }}">{{ $service->servicename }}</option>
-                                	@endforeach
                                 </select>
 								<span class="help-text text-danger"></span>
                             </div>
@@ -27,9 +39,9 @@
                             <label class ="control-label col-sm-4">Worker</label>
                             <div class="col-sm-7">
                             	<select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
-                            		@foreach($workers as $worker)
+                            		<!--@foreach($workers as $worker)
                                 		<option value="{{ $worker->id }}">{{ $worker->workerlname }}, {{ $worker->workerfname }}</option>
-                                	@endforeach
+                                	@endforeach-->
                                 </select>
 								<span class="help-text text-danger"></span>
                             </div>
@@ -84,4 +96,37 @@
 	        });
 		});
 	 });
+
+	$('#select_servicecategory').change(function(){
+      var servicecategory = $(this).val();
+      var that = this;
+      var token = $("input[name='_token']").val();
+      $.ajax({
+	          url: "{{url('select-service')}}/"+servicecategory,
+	          method: 'GET',
+	          success: function(data) {
+	            $("select[name='service_id'").html('');
+	            $("select[name='service_id'").html(data);
+	          }
+	      });
+	  });
+	$('#select_servicecategory').change();
+
+	function getWorkers(){
+		$('#service_id').change(function(){
+	      var service_id = $(this).val();
+	      var that = this;
+	      var token = $("input[name='_token']").val();
+	      $.ajax({
+		          url: "{{url('select-worker')}}/"+service_id,
+		          method: 'GET',
+		          success: function(data) {
+		            $("select[name='worker_id'").html('');
+		            $("select[name='worker_id'").html(data);
+		          }
+		      });
+		      
+		  });
+	}
+	getWorkers();
 </script>

@@ -161,4 +161,9 @@ class ServicesController extends Controller
             return response()->json(['success' => false, 'msg' => 'An error occured while deleting service!']);
         }
     }
+
+    public function get_services_by_category($category){
+        $services = Service::where('servicecategory', $category)->get();
+        return response()->json($services);
+    }
 }

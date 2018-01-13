@@ -97,92 +97,18 @@
           }); 
         });
 
-        $(document).off('click','.view-data-btn').on('click','.view-data-btn', function(e){
+        $(document).off('click','.view-transaction-btn').on('click','.view-transaction-btn', function(e){
           e.preventDefault();
           var that = this; 
-          $("#viewmodal").html('');
-          $("#viewmodal").modal();
+          $("#add-transaction-details").html('');
+          $("#add-transaction-details").modal();
           $.ajax({
-            url: '/appointments/'+that.dataset.id+'',         
+            url: '/transactions/'+that.dataset.id+'',         
             success: function(data) {
-              $("#viewmodal").html(data);
+              $("#add-transaction-details").html(data);
             }
           }); 
-        });
-
-        $(document).off('click','.reschedule-data-btn').on('click','.reschedule-data-btn', function(e){
-          e.preventDefault();
-          var that = this; 
-          $("#reschedulemodal").html('');
-          $("#reschedulemodal").modal();
-          $.ajax({
-            url: '/appointments/'+that.dataset.id+'/rescheduleform',         
-            success: function(data) {
-              $("#reschedulemodal").html(data);
-            }
-          }); 
-        });
-
-        $(document).off('click','.cancel-data-btn').on('click','.cancel-data-btn', function(e){
-          e.preventDefault();
-          var that = this; 
-          $("#cancelmodal").html('');
-          $("#cancelmodal").modal();
-          $.ajax({
-            url: '/appointments/'+that.dataset.id+'/cancelform',         
-            success: function(data) {
-              $("#cancelmodal").html(data);
-            }
-          }); 
-        });
-
-
-
-        
-     /*   $(document).off('click','.cancel-data-btn').on('click','.cancel-data-btn', function(e){
-          e.preventDefault();
-          var that = this; 
-                bootbox.confirm({
-                  title: "Confirm Appointment Cancellation?",
-                  className: "del-bootbox",
-                  message: "Are you sure you want to cancel appointment?",
-                  buttons: {
-                      confirm: {
-                          label: 'Yes',
-                          className: 'btn-success'
-                      },
-                      cancel: {
-                          label: 'No',
-                          className: 'btn-danger'
-                      }
-                  },
-                  callback: function (result) {
-                     if(result){
-                      //var token = '{{csrf_token()}}'; 
-                      $.ajax({
-                      url:'/appointments/'+that.dataset.id,
-                      type: 'delete',
-                      //data: {_method: 'delete', _token :token},
-                      success:function(result){
-                        $("#appointments-table").DataTable().ajax.url( '/appointments/get_datatable' ).load();
-                        if(result.success){
-                        swal({
-                            title: result.msg,
-                            icon: "success"
-                          });
-                        }else{
-                          swal({
-                            title: result.msg,
-                            icon: "error"
-                          });
-                        }
-                      }
-                      }); 
-                     }
-                  }
-              });
-        }); */
-
+        });    
     });
 });
 </script>
