@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Validator;
 use Session;
 use Eloquent;
+use Auth;
 
 class AppointmentsController extends Controller
 {
@@ -65,6 +66,9 @@ class AppointmentsController extends Controller
                     </button>
                     <button title="Cancel appointment" class="btn btn-danger cancel-data-btn" data-id="'.$appointment->id.'">
                         <span class="glyphicon glyphicon-remove-circle"></span>
+                    </button>
+                    <button title="Make transaction from appointment" class="btn btn-default make-transaction-btn" data-id="'.$appointment->id.'">
+                        <span class="fa fa-plus-square"></span>
                     </button>';
         })
         ->make(true);
@@ -72,7 +76,8 @@ class AppointmentsController extends Controller
 
     public function get_datatable_appointhistory()
     {
-        $appointments = \App\Appointment::where('appointStatus', ["Cancelled","Closed"]);
+        $status = ["Cancelled", "Closed"];
+        $appointments = \App\Appointment::wherein('appointStatus', $status)->get();
 
         return Datatables::of($appointments)
         ->addColumn('id', function($appointment){
@@ -100,6 +105,48 @@ class AppointmentsController extends Controller
                     </button>';
         })
         ->make(true);
+    }
+
+    public function appointmenttransactionform($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+
+        return view('appointments.appointmenttransactionform')->with('appointment',$appointment);
+    }
+
+    public function appointmenttransaction(Request $request, $id)
+    {
+        $transaction = \App\Transaction::create([
+            'customer_id' => $request->customer_id,
+            'transactStatus' => "Pending",
+            'transactBill' => 0, 
+            'user_id' => Auth::user()->id,
+        ]);
+
+        $transactiondetail = \App\TransactionDetail::create([
+            'service_id' => $request->service_id,
+            'worker_id'  => $request->worker_id,
+            'transaction_id' => $transaction->id,
+            'workergrossincome' => 0,
+            'companygrossincome' => 0,
+        ]);
+
+        $appointmenttransaction = \App\AppointmentTransaction::create([
+            'transaction_id' => $transaction->id,
+            'appointment_id' => $id,
+        ]);
+
+            if(Appointment::find($id)->update([
+                'appointStatus' => "Closed",
+            ])){
+                return response()->json(['success' => true, 'msg' => 'Transaction from Appointment Successfully Created!']);
+            }else{
+                return response()->json(['success' => false, 'msg' => 'Transaction from Appointment Not Created!']);
+            }
+
+        //appointment = Appointment::findOrFail($id);
+
+        //return ('appointments.addappointmenttransactionform')->with('appointment',$appointment);
     }
 
     /**

@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <ul class="nav navbar-nav">
                     @if (Auth::guard('customer')->check())
-                        <li><a href="{{ url('/customer') }}">Dashboard</a>
+                        <li class="{{ Request::is('customer') ? 'active': '' }}"><a href="{{ url('/customer') }}">Dashboard</a>
                         <li><a href="appointment.php">My Appointments</a>
                         <li><a href="transaction_and_bill.php">My Transactions</a>
                     @elseif (Auth::guard('worker')->check())
@@ -32,12 +32,12 @@
                         <li><a href="gross_income.php"></a>
                         <li><a href="generatereport.php">Generate Reports</a>
                     @elseif (Auth::user()->role == "Manager")
-                        <li><a href="{{ url('/users') }}">Users</a>
-                        <li><a href="{{ url('/workers') }}">Workers</a>
-                        <li><a href="{{ url('/customers') }}">Customers</a>
-                        <li><a href="{{ url('/services') }}">Services</a>
-                        <li><a href="{{ url('/appointments') }}">Appointment</a>
-                        <li><a href="{{ url('/transactions') }}">Transaction and Bill</a>
+                        <li class="{{ Request::is('users') ? 'active': '' }}"><a href="{{ url('/users') }}">Users</a>
+                        <li class="{{ Request::is('workers') ? 'active': '' }}"><a href="{{ url('/workers') }}">Workers</a>
+                        <li class="{{ Request::is('customers') ? 'active': '' }}"><a href="{{ url('/customers') }}">Customers</a>
+                        <li class="{{ Request::is('services') ? 'active': '' }}"><a href="{{ url('/services') }}">Services</a>
+                        <li class="{{ Request::is('appointments') ? 'active': '' }}"><a href="{{ url('/appointments') }}">Appointment</a>
+                        <li class="{{ Request::is('transactions') ? 'active': '' }}"><a href="{{ url('/transactions') }}">Transaction and Bill</a>
                         <li><a href="gross_income.php">Gross Income</a>
                         <li><a href="generatereport.php">Generate Reports</a>
                     @else

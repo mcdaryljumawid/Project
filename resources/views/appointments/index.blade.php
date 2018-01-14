@@ -53,6 +53,7 @@
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="addmodal"></div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="reschedulemodal"></div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="cancelmodal"></div>
+  <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="transactionmodal"></div>
 
 <script type="text/javascript">
 	$(function() {
@@ -141,8 +142,18 @@
           }); 
         });
 
-
-
+        $(document).off('click','.make-transaction-btn').on('click','.make-transaction-btn', function(e){
+          e.preventDefault();
+          var that = this; 
+          $("#transactionmodal").html('');
+          $("#transactionmodal").modal();
+          $.ajax({
+            url: '/appointments/'+that.dataset.id+'/appointmenttransactionform',         
+            success: function(data) {
+              $("#transactionmodal").html(data);
+            }
+          }); 
+        });
         
      /*   $(document).off('click','.cancel-data-btn').on('click','.cancel-data-btn', function(e){
           e.preventDefault();

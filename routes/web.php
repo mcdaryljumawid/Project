@@ -47,6 +47,7 @@ Route::get('/services/get_datatable', 'ServicesController@get_datatable')->name(
 Route::get('/appointments/get_datatable', 'AppointmentsController@get_datatable')->name('appointments.get_datatable');
 Route::get('/appointments/get_datatable_appointhistory', 'AppointmentsController@get_datatable_appointhistory')->name('appointments.get_datatable_appointhistory');
 Route::get('/transactions/get_datatable', 'TransactionsController@get_datatable')->name('transactions.get_datatable');
+Route::get('/transactions/get_datatable_closedtransactions', 'TransactionsController@get_datatable_closedtransactions')->name('transactions.get_datatable_closedtransactions');
 
 //crudroutes
 Route::resource('users', 'UsersController'); //user routes
@@ -64,6 +65,11 @@ Route::patch('appointments/{appointment}', 'AppointmentsController@reschedule')-
 //appointments -- cancel
 Route::get('appointments/{appointment}/cancelform', 'AppointmentsController@cancelform')->name('appointments.cancelform');
 Route::patch('appointments/{appointment}/cancel', 'AppointmentsController@cancel')->name('appointments.cancel');
+//appointments -- appontmenttransaction 
+Route::get('appointments/{appointment}/appointmenttransactionform', 'AppointmentsController@appointmenttransactionform')->name('appointments.appointmenttransactionform');
+Route::patch('appointments/{appointment}/appointmenttransaction', 'AppointmentsController@appointmenttransaction')->name('appointments.appointmenttransaction');
+
+
 //Route::patch('appointments/{appointment}', 'AppointmentsController@cancel')->name('appointments.cancel');
 //transaction add transaction details
 Route::get('transactions/{transaction}/adddetailsform', 'TransactionsController@adddetailsform')->name('transactions.adddetailsform');
@@ -71,6 +77,10 @@ Route::patch('transactions/{transaction}/adddetails', 'TransactionsController@ad
 //transactions
 Route::get('select-service/{data}', 'TransactionsController@selectService')->name('select-service');
 Route::get('select-worker/{data}', 'TransactionsController@selectWorker')->name('select-worker');
+Route::get('transactions/{transaction}/generatebill', 'TransactionsController@generatebill')->name('transactions.generatebill');
+Route::patch('transactions/{transaction}/finalizepayment', 'TransactionsController@finalizepayment')->name('transactions.finalizepayment');
+Route::get('transactions/{transaction}/transactiondetails', 'TransactionsController@transactiondetails')->name('transactions.transactiondetails');
+Route::delete('transactions/{transaction}/deletetransactiondetails', 'TransactionsController@deletetransactiondetails')->name('transactions.deletetransactiondetails');
 
 //appointments
 Route::get('select-service-appointment/{data}', 'AppointmentsController@selectService')->name('select-service-appointment');

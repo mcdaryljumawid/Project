@@ -43,7 +43,7 @@ class TransactionsController extends Controller
      */
     public function get_datatable()
     {
-        $transactions = \App\Transaction::all();
+        $transactions = \App\Transaction::where('transactStatus', "Pending");
 
         return Datatables::of($transactions)
         ->addColumn('id', function($transaction){
@@ -64,13 +64,42 @@ class TransactionsController extends Controller
         ->addColumn('action', function ($transaction){
             return '
                     <button title="Add Transaction Details" class="btn btn-primary add-details-btn" data-id="'.$transaction->id.'">
-                        <span class="glyphicon glyphicon-plus"></span>
+                        <span class="fa fa-plus"></span>
                     </button>
-                    <button title="View Transaction Details" class="btn btn-primary view-transaction-btn" data-id="'.$transaction->id.'">
+                    <button title="Generate Bill" class="btn btn-warning generate-bill-btn" data-id="'.$transaction->id.'">
+                        <span class="fa fa-money"></span>
+                    </button>
+                    <button title="Delete Transaction Details" class="btn btn-danger transaction-details-btn" data-id="'.$transaction->id.'">
+                        <span class="fa fa-ban"></span>
+                    </button>';
+        })
+        ->make(true);
+    }
+
+    public function get_datatable_closedtransactions()
+    {
+        $transactions = \App\Transaction::where('transactStatus', "Closed");
+
+        return Datatables::of($transactions)
+        ->addColumn('id', function($transaction){
+            return $transaction->id;
+        })
+        ->addColumn('datetime', function($transaction){
+            return date('M d, Y h:i A', strtotime($transaction->created_at));
+        })
+        ->addColumn('handlinguser', function($transaction){
+            return $transaction->user->lastname.", ".$transaction->user->firstname;
+        })
+        ->addColumn('customername', function($transaction){
+            return $transaction->customer->custlname.", ".$transaction->customer->custfname;
+        })
+        ->addColumn('status', function($transaction){
+            return $transaction->transactStatus;
+        })
+        ->addColumn('action', function ($transaction){
+            return '
+                    <button title="View Transaction Details" class="btn btn-info view-transaction-btn" data-id="'.$transaction->id.'">
                         <span class="glyphicon glyphicon-list"></span>
-                    </button>
-                    <button title="Generate Bill" class="btn btn-info generate-bill-btn" data-id="'.$transaction->id.'">
-                        <span class="glyphicon glyphicon-credit-card"></span>
                     </button>';
         })
         ->make(true);
@@ -123,6 +152,76 @@ class TransactionsController extends Controller
         return view('transactions.view', compact(['transaction', 'transactiondetails']));
     }
 
+    public function generatebill($id)
+    {
+        $transaction = Transaction::findorFail($id);
+        $sum = 0;  
+        $transactiondetails = TransactionDetail::where('transaction_id', $id)->get();
+
+        foreach($transactiondetails as $transactiondetail)
+        {
+            $sum = $sum + $transactiondetail->service->serviceprice;
+        }
+
+        return view('transactions.generatebill', compact(['transaction', 'transactiondetails', 'sum']));
+    }
+
+    public function transactiondetails($id)
+    {
+        //$transaction = Transaction::findorFail($id);
+        $transactiondetails = TransactionDetail::where('transaction_id', $id)->get();
+
+        return view('transactions.transactiondetails', compact(['transactiondetails']));
+    }
+
+    public function deletetransactiondetails($id)
+    {
+         if(TransactionDetail::destroy($id)){
+            return response()->json(['success' => true, 'msg' => 'Transaction Detail Successfully deleted!']);
+        }else{
+            return response()->json(['success' => false, 'msg' => 'An error occured while deleting transaction detail!']);
+        }
+    }
+
+    public function finalizepayment(Request $request, $id)
+    {
+        $transaction = Transaction::findorFail($id);
+        $sum = 0;  
+        $workergrossincome = 0;
+        $companygrossincome = 0;
+
+        $transactiondetails = TransactionDetail::where('transaction_id', $id)->get();
+
+        foreach($transactiondetails as $transactiondetail)
+        {
+            $sum = $sum + $transactiondetail->service->serviceprice;
+            if($transactiondetail->worker->workerlevel === "High")
+            {
+                $workergrossincome = ($transactiondetail->service->serviceprice)*.60;
+                $companygrossincome = ($transactiondetail->service->serviceprice)*.40;
+            }
+            else
+            {
+                $workergrossincome = ($transactiondetail->service->serviceprice)*.50;
+                $companygrossincome = ($transactiondetail->service->serviceprice)*.50;
+            }
+
+            TransactionDetail::find($transactiondetail->id)->update([
+                'workergrossincome' => $workergrossincome,
+                'companygrossincome' => $companygrossincome,
+            ]);
+        }
+
+        if(Transaction::find($id)->update([
+            'transactBill' => $sum,
+            'transactStatus' => "Closed",
+        ])){
+            return response()->json(['success' => true, 'msg' => 'Payment successfully finalized!']);
+        }else{
+            return response()->json(['success' => false, 'msg' => 'Error finalizing payment!']);
+        }
+    }
+
     public function adddetailsform($id)
     {
         $transaction = Transaction::findorFail($id);
@@ -155,6 +254,7 @@ class TransactionsController extends Controller
 
     public function selectService(Request $request, $data)
     {
+
         if($request->ajax())
         {
             $services = \App\Service::where('servicecategory', $data)->get();
@@ -166,6 +266,8 @@ class TransactionsController extends Controller
 
     public function selectWorker(Request $request, $data)
     {
+
+
         $types = ["All-around (Rebond specialized)","All-around (Haircut specialized)"];
         if($request->ajax())
         {

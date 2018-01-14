@@ -110,7 +110,8 @@
 	          }
 	      });
 	  });
-	$('#select_servicecategory').change();
+	 $('#select_servicecategory').change();
+	
 
 	function getWorkers(){
 		$('#service_id').change(function(){
@@ -129,4 +130,5 @@
 		  });
 	}
 	getWorkers();
+	
 </script>

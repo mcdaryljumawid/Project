@@ -24,4 +24,9 @@ class Transaction extends Model
     {
         return $this->hasMany('App\TransactionDetail');
     }
+
+    public function appointmenttransaction()
+    {
+    	return $this->hasOne('App\AppointmentTransaction');
+    }
 }

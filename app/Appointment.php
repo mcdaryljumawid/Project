@@ -24,5 +24,10 @@ class Appointment extends Model
 	{
 		return $this->belongsTo('App\Customer');
 	}
+
+	public function appointmenttransaction()
+    {
+    	return $this->hasOne('App\AppointmentTransaction');
+    }
 }
 

@@ -30,7 +30,7 @@
 							<div class="col-sm-4">{{ date('M d, Y', strtotime($transaction->created_at)) }}</div>
 							</div>
 
-							
+							<br>
 							<div class="row">
 							<div class="col-sm-4"><strong>Services availed:</strong>
 							</div> 
@@ -41,6 +41,12 @@
 								<div class="col-sm-4">{{$transactiondetail->worker->workerlname}}, {{$transactiondetail->worker->workerfname}}</div><br>
 							@endforeach
 							</div>
+
+							<div align="center">
+								<h4><strong>Total bill:</h4><h4 style="color: green;">₱ {{ number_format($transactiondetail->transaction->transactBill, 2, '.', ',') }}</h4></strong>
+							</div>
+
+
 					</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
