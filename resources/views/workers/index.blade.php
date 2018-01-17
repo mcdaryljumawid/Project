@@ -22,7 +22,8 @@
 			<td>Middlename</td>
 			<td>Lastname</td>
 			<td>Level</td>
-            <td>Type</td>
+      <td>Type</td>
+      <td>Status</td>
 			<td>Actions</td>
 		</tr>
 	</thead>
@@ -47,6 +48,7 @@
                 {data: 'workerlname', name: 'workerlname', className: 'col-md-1 text-left'},
                 {data: 'workerlevel', name: 'workerlevel', className: 'col-md-1 text-left', orderable: false,},
                 {data: 'workertype', name: 'workertype', className: 'col-md-1 text-left'},
+                {data: 'status', name: 'status', className: 'col-md-1 text-left'},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false, searchable: false}
             ],
             initComplete: function () {

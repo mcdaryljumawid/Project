@@ -58,6 +58,7 @@ class AppointmentsController extends Controller
         })
         ->addColumn('action', function ($appointment){
             return '
+                    <div class="btn-group" style="display: flex;">
                     <button title="View Appointment Details" class="btn btn-primary view-data-btn" data-id="'.$appointment->id.'">
                         <span class="glyphicon glyphicon-search"></span>
                     </button>
@@ -69,7 +70,7 @@ class AppointmentsController extends Controller
                     </button>
                     <button title="Make transaction from appointment" class="btn btn-default make-transaction-btn" data-id="'.$appointment->id.'">
                         <span class="fa fa-plus-square"></span>
-                    </button>';
+                    </button></div>';
         })
         ->make(true);
     }

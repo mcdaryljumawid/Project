@@ -89,7 +89,8 @@
 	                });
 	            }
 	            $("#transactions-table").DataTable().ajax.url( '/transactions/get_datatable' ).load();
-	            //$('.modal').modal('hide');
+	            $("#closed-transactions-table").DataTable().ajax.url( '/transactions/get_datatable_closedtransactions' ).load();
+	            $('.modal').modal('hide');
 	          },
 	          error: function(xhr,status,error){
 	            var response_object = JSON.parse(xhr.responseText); 

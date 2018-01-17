@@ -16,6 +16,16 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+//CHANGE PASSWORD
+Route::get('/changePassword','ChangePasswordController@showChangePasswordForm');
+Route::post('/changePassword','ChangePasswordController@changePassword')->name('changePassword');
+
+Route::get('/customer/changePassword','CustomerController@showChangePasswordForm');
+Route::post('/customer/changePassword','CustomerController@changePassword')->name('customer.changePassword');
+
+Route::get('/worker/changePassword','WorkerController@showChangePasswordForm');
+Route::post('/worker/changePassword','WorkerController@changePassword')->name('worker.changePassword');
+
 //main users redirection route
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/cashier', 'CashierController@index')->name('cashier');

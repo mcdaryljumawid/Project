@@ -63,14 +63,15 @@ class CustomersController extends Controller
     {
 
         $data = request()->validate([
-        'custfname' => 'required|max:25',
-        'custmname' => 'required|max:25',
-        'custlname' => 'required|max:25',
-        'custContactNo' => 'required|unique:customers|min:11|size:11',
+        'custfname' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
+        'custmname' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
+        'custlname' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
+        'custContactNo' => 'required|unique:customers|regex:/(09)[0-9]{9}/|size:11',
         'email' => 'required|unique:customers|email',
         'custUsername' => 'required|unique:customers|max:25',
         'custgender' => 'required',
-        'password' => 'required|min:6|max:20|same:confirm_password'
+        'password' => 'required|min:6|max:20|same:confirm_password',
+        'status' => 'required'
         ]);
 
         /*if($validator->fails())
@@ -101,15 +102,15 @@ class CustomersController extends Controller
         }
 
         if($data['custfname']){
-            $data['custfname'] = ucfirst($data['custfname']);          
+            $data['custfname'] = ucwords($data['custfname']);          
         }
 
         if($data['custmname']){
-            $data['custmname'] = ucfirst($data['custmname']);          
+            $data['custmname'] = ucwords($data['custmname']);          
         }
 
         if($data['custlname']){
-            $data['custlname'] = ucfirst($data['custlname']);          
+            $data['custlname'] = ucwords($data['custlname']);          
         }
 
         if(\App\Customer::create($data)){

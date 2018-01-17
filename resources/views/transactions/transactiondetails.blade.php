@@ -2,7 +2,7 @@
       	<!-- Modal content-->
       		<div class="modal-content">
         		<div class="modal-header" style="background-color: #808080;color: #fff;">
-          			<h4 class="modal-title" align="center">BILL</h4>
+          			<h4 class="modal-title" align="center">DELETE TRANSACTION DETAIL</h4>
         		</div>
         		<form class="form-horizontal" method="PATCH" action="/transactions/{transaction}/deletetransactiondetail " id="add-transactiondetails-form">
 					{{ csrf_field() }}

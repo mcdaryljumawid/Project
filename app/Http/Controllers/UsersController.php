@@ -32,7 +32,7 @@ class UsersController extends Controller
 
     public function get_datatable()
     {
-        $users = User::select(['id','firstname', 'middlename', 'lastname', 'role']);
+        $users = User::select(['id','firstname', 'middlename', 'lastname', 'role', 'status']);
 
         return Datatables::of($users)
         ->addColumn('action', function ($user){
@@ -66,11 +66,12 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([/*Validator::make($request->all(), [*/
-        'firstname'     => 'required|max:25',
-        'lastname'      => 'required|max:25',
-        'middlename'    => 'required|max:25',
+        'firstname'     => 'required|max:25|regex:/^[a-zA-Z ]+$/',
+        'lastname'      => 'required|max:25|regex:/^[a-zA-Z ]+$/',
+        'middlename'    => 'required|max:25|regex:/^[a-zA-Z ]+$/',
         'password'      => 'required|min:6|max:20|same:confirm_password',
-        'role'          => 'required'
+        'role'          => 'required',
+        'status'        => 'required'
         ]);
 
         /* if($validator->fails())
@@ -97,15 +98,15 @@ class UsersController extends Controller
         }
         
         if($data['firstname']){
-            $data['firstname'] = ucfirst($data['firstname']);          
+            $data['firstname'] = ucwords($data['firstname']);          
         }
 
         if($data['middlename']){
-            $data['middlename'] = ucfirst($data['middlename']);          
+            $data['middlename'] = ucwords($data['middlename']);          
         }
 
         if($data['lastname']){
-            $data['lastname'] = ucfirst($data['lastname']);          
+            $data['lastname'] = ucwords($data['lastname']);          
         }
         
 
@@ -158,6 +159,7 @@ class UsersController extends Controller
         'middlename'    => 'required|max:25',
         'password'      => 'nullable|min:6|max:20|same:confirm_password',
         'role'          => 'required',
+        'status'        => 'required',
         ]);
 
         if($data['password']){

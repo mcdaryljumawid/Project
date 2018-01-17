@@ -58,6 +58,10 @@
                             </div>
                         </div>
 
+                        <div class = "form-group">
+                        	<input  id="status" type="hidden" class="form-control" name="status" value="Active">
+                        </div>
+
 		        		<div class="modal-footer">
 		        			<div align="center">
 								<div class="submit-btn btn btn-success">Add Service</div>

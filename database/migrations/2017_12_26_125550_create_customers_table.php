@@ -23,6 +23,7 @@ class CreateCustomersTable extends Migration
             $table->string('email', 50);
             $table->string('custUsername', 50);
             $table->string('password');
+            $table->enum('status', ['Active', 'Inactive']);
             $table->timestamps();
             $table->rememberToken();
         });

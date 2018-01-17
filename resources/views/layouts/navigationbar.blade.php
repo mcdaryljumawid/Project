@@ -64,6 +64,21 @@
 
                                 <ul class="dropdown-menu">
                                     <li>
+                                        @if (Auth::guard('worker')->check())
+                                        <a href="{{ url('/worker/changePassword') }}">
+                                            Change Password
+                                        </a>
+                                        @elseif (Auth::guard('customer')->check())
+                                        <a href="{{ url('/customer/changePassword') }}">
+                                            Change Password
+                                        </a>
+                                        @else
+                                        <a href="{{ url('/changePassword') }}">
+                                            Change Password
+                                        </a>
+                                        @endif
+                                    </li>
+                                    <li>
                                         @if (Auth::guard('customer')->check())
                                         <a href="{{ route('customer.logout') }}"
                                             onclick="event.preventDefault();

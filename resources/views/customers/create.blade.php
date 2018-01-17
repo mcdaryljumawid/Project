@@ -44,7 +44,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-4">Password</label>
 							<div class="col-sm-7">
-					    		<input id="password" type="password" class="form-control" name="password" required autofocus>
+					    		<input id="password" type="password" class="form-control" name="password" placeholder="Password" required autofocus>
 					    		<span class="help-text text-danger"></span>
 					  		</div>
 						</div>
@@ -52,7 +52,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-4">Confirm Password</label>
 							<div class="col-sm-7">
-								<input type="password" class="form-control" id="confirm_password" placeholder="Password" name="confirm_password" required>
+								<input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password" name="confirm_password" required>
 								<span class="help-text text-danger"></span>
 							</div>
 						</div>
@@ -82,6 +82,10 @@
 					    		<input id="email" type="text" class="form-control"  placeholder="email@example.com" name="email" required autofocus>
 					    		<span class="help-text text-danger"></span>
 					  		</div>
+						</div>
+
+						<div class="form-group">
+							<input id="status" type="hidden" class="form-control" name="status" value="Active">
 						</div>
 
 			        	<div class="modal-footer">

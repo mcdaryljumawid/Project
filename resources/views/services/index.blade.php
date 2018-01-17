@@ -24,6 +24,7 @@
 			  <td>Price</td>
 			  <td>Duration (minutes)</td>
         <td>Category</td>
+        <td>Status</td>
         <td>Actions</td>
 		</tr>
 	</thead>
@@ -46,6 +47,7 @@
                 {data: 'serviceprice', name: 'serviceprice', className: 'col-md-1 text-left'},
                 {data: 'serviceduration', name: 'serviceduration', className: 'col-md-1 text-left'},
                 {data: 'servicecategory', name: 'servicecategory', className: 'col-md-1 text-left'},
+                {data: 'status', name: 'status', className: 'col-md-1 text-left'},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false, searchable: false}
             ],
             initComplete: function () {

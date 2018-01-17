@@ -5,6 +5,12 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading" align="center">Customer Login</div>
+                @if(Session::get('message') !== null)
+                <div class="alert alert-block alert-danger" align="center">
+                {{ Session::get('message') !== null ? Session::get('message') : '' }}
+                </div>
+              
+                @endif
 
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('customer.login.submit') }}">
@@ -36,6 +42,7 @@
                                     </span>
                                 @endif
                             </div>
+                        </div>
  
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">

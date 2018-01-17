@@ -15,7 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
-            $table->float('transactBill', 5,2);
+            $table->float('transactBill', 7,2);
             $table->enum('transactStatus', ['Pending', 'Closed']);
             $table->timestamps();
             $table->integer('user_id')->unsigned();

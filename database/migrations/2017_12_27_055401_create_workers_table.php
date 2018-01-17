@@ -28,6 +28,8 @@ class CreateWorkersTable extends Migration
             $table->enum('workerlevel', ['Low', 'High']);
             $table->enum('workertype', ['Barber', 'All-around (Rebond specialized)', 'All-around (Haircut specialized)']);
             $table->string('password');
+            $table->enum('status', ['Active', 'Inactive']);
+            $table->boolean('availability');
             $table->timestamps();
             $table->rememberToken();
         });

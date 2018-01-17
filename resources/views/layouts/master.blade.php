@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<title>@yield('title')</title>
 	<meta name="description" content="IT Project">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 @extends('layouts.resourcesdeep')
 </head>
 <body

@@ -15,8 +15,8 @@ class CreateTransactiondetailsTable extends Migration
     {
          Schema::create('transaction_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->float('workergrossincome', 5,2);
-            $table->float('companygrossincome', 5,2);
+            $table->float('workergrossincome', 7,2);
+            $table->float('companygrossincome', 7,2);
             $table->integer('service_id')->unsigned();
             $table->integer('worker_id')->unsigned();
             $table->integer('transaction_id')->unsigned();

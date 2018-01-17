@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('lastname', 50);
             $table->string('middlename', 50);
             $table->enum('role', ['Manager', 'Cashier']);
+            $table->enum('status', ['Active', 'Inactive']);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

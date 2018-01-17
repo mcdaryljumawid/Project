@@ -3,27 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
+use Hash;
 
-class WorkerController extends Controller
+class ChangePasswordController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+	public function __construct()
     {
-        $this->middleware('auth:worker');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('worker');
+        $this->middleware('auth');
     }
 
     public function showChangePasswordForm(){
@@ -54,5 +41,5 @@ class WorkerController extends Controller
  
         return redirect()->back()->with("success","Password changed successfully !");
  
-    }  
+    }
 }

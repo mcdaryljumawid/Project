@@ -63,6 +63,7 @@ class TransactionsController extends Controller
         })
         ->addColumn('action', function ($transaction){
             return '
+                    <div class="btn-group" style="display: flex;">
                     <button title="Add Transaction Details" class="btn btn-primary add-details-btn" data-id="'.$transaction->id.'">
                         <span class="fa fa-plus"></span>
                     </button>
@@ -71,7 +72,7 @@ class TransactionsController extends Controller
                     </button>
                     <button title="Delete Transaction Details" class="btn btn-danger transaction-details-btn" data-id="'.$transaction->id.'">
                         <span class="fa fa-ban"></span>
-                    </button>';
+                    </button></div>';
         })
         ->make(true);
     }
@@ -206,7 +207,7 @@ class TransactionsController extends Controller
                 $companygrossincome = ($transactiondetail->service->serviceprice)*.50;
             }
 
-            TransactionDetail::find($transactiondetail->id)->update([
+             TransactionDetail::find($transactiondetail->id)->update([
                 'workergrossincome' => $workergrossincome,
                 'companygrossincome' => $companygrossincome,
             ]);

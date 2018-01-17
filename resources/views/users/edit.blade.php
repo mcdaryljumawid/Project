@@ -64,6 +64,17 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class ="control-label col-sm-4">Status</label>
+                            <div class="col-sm-7">
+                            	<select class="select form-control " id="status" name="status" style="width: 200px">
+                                	<option value="Active" {{$user->status == 'Active' ? 'selected':''}}>Active</option>
+                                    <option value="Inactive" {{$user->status == 'Inactive' ? 'selected':''}}>Inactive</option>
+                                </select>
+								<span class="help-text text-danger"></span>
+                            </div>
+                        </div>
+
 		        		<div class="modal-footer">
 		        			<div align="center">
 		        				<div class="update-btn btn btn-success">Update User</div>

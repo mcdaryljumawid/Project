@@ -22,6 +22,7 @@
 			<td>Middlename</td>
 			<td>Lastname</td>
 			<td>Role</td>
+      <td>Status</td>
 			<td>Actions</td>
 		</tr>
 	</thead>
@@ -43,6 +44,7 @@
                 {data: 'middlename', name: 'middlename', className: 'col-md-1 text-left'},
                 {data: 'lastname', name: 'lastname', className: 'col-md-1 text-left'},
                 {data: 'role', name: 'role', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'status', name: 'status', className: 'col-md-1 text-left', orderable: false,},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false, searchable: false}
             ],
             initComplete: function () {

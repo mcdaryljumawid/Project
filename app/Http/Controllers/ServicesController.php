@@ -31,7 +31,7 @@ class ServicesController extends Controller
 
     public function get_datatable()
     {
-        $services = Service::select(['id', 'servicetype', 'servicename', 'serviceprice', 'serviceduration', 'servicecategory']);
+        $services = Service::select(['id', 'servicetype', 'servicename', 'serviceprice', 'serviceduration', 'servicecategory', 'status']);
 
         return Datatables::of($services)
         ->addColumn('action', function ($service){
@@ -66,11 +66,12 @@ class ServicesController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([
-        'servicename'       => 'required|unique:services|max:50',
-        'serviceprice'      => 'required|integer',
-        'serviceduration'   => 'required|integer',
+        'servicename'       => 'required|unique:services|max:50|regex:/^[a-zA-Z ]+$/',
+        'serviceprice'      => 'required|numeric|min:1',
+        'serviceduration'   => 'required|numeric|min:1',
         'servicetype'       => 'required',
         'servicecategory'   => 'required',
+        'status'            => 'required',
         ]);
 
         /* if($validator->fails())
@@ -134,10 +135,11 @@ class ServicesController extends Controller
     {
         $data = request()->validate([
         'servicename'       => 'required|max:50',
-        'serviceprice'      => 'required|integer',
-        'serviceduration'   => 'required|integer',
+        'serviceprice'      => 'required|numeric',
+        'serviceduration'   => 'required|numeric',
         'servicetype'       => 'required',
         'servicecategory'   => 'required',
+        'status'            => 'required'
         ]);
 
         if(Service::find($id)->update($data)){

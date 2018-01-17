@@ -30,12 +30,13 @@ class WorkersController extends Controller
 
     public function get_datatable()
     {
-        $workers = Worker::select(['id','workerfname', 'workermname', 'workerlname', 'workerlevel', 'workertype']);
+        $workers = Worker::select(['id','workerfname', 'workermname', 'workerlname', 'workerlevel', 'workertype', 'status']);
 
         return Datatables::of($workers)
         ->addColumn('action', function ($worker){
 
             return '
+                    <div class="btn-group" style="display: flex;">
                     <button title="View Worker Details" class="btn btn-primary view-data-btn" data-id="'.$worker->id.'">
                             <span class="glyphicon glyphicon-search"></span>
                     </button>
@@ -44,7 +45,7 @@ class WorkersController extends Controller
                     </button>
                     <button title="Delete Worker" class="btn btn-danger delete-data-btn" data-id="'.$worker->id.'">
                             <span class="glyphicon glyphicon-trash"></span>
-                    </button>';
+                    </button></div>';
         })
         ->make(true);
     }
@@ -68,51 +69,52 @@ class WorkersController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([
-        'workerfname' => 'required|max:25',
-        'workerlname' => 'required|max:25',
-        'workermname' => 'required|max:25',
+        'workerfname' => 'required|max:50|regex:/^[a-zA-Z ]+$/',
+        'workerlname' => 'required|max:50|regex:/^[a-zA-Z ]+$/',
+        'workermname' => 'required|max:50|regex:/^[a-zA-Z ]+$/',
         'workerbrgy' => 'required|max:25',
-        'workertown' => 'required|max:25',
+        'workertown' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
         'workergender' => 'required',
-        'workerprovince' => 'required|max:25',
+        'workerprovince' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
         'workerContactNo' => 'required|size:11|regex:/(09)[0-9]{9}/|unique:workers',
         'workerlevel' => 'required',
         'workertype' => 'required',
         'password' => 'required|min:6|max:20|same:confirm_password',
+        'status'    => 'required',
+        'availability' => 'required',
         'workerdbirth' => 'nullable|date',
         ]);
-
-        /*if($validator->fails())
-        {
-            return back()
-            ->withErrors($validator)
-            ->withInput();
-        }
-        else
-        {
-            Worker::create([
-            'workerfname' => ucfirst($request->workerfname),
-            'workerlname' => ucfirst($request->workerlname),
-            'workermname' => ucfirst($request->workermname),
-            'workerdbirth' => $request->workerdbirth,
-            'workerbrgy' => ucfirst($request->workerbrgy),
-            'workertown' => ucfirst($request->workertown),
-            'workerprovince' => ucfirst($request->workerprovince),
-            'workergender' => $request->workergender,   
-            'workermaritalStatus' => $request->workermaritalStatus,
-            'workerContactNo' => $request->workerContactNo,
-            'workertype' => $request->workertype,
-            'workerlevel' => $request->workerlevel,
-            'password' => bcrypt($request->password)
-            ]);
-
-            Session::flash('message', 'Worker successfully created!');
-            return redirect('/workers');
-        }*/
 
         if($data['password']){
             $data['password'] = bcrypt($data['password']);          
         }
+
+        if($data['workerfname']){
+            $data['workerfname'] = ucwords($data['workerfname']);          
+        }
+
+        if($data['workerlname']){
+            $data['workerlname'] = ucwords($data['workerlname']);          
+        }
+
+        if($data['workermname']){
+            $data['workermname'] = ucwords($data['workermname']);          
+        }
+
+        if($data['workerbrgy']){
+            $data['workerbrgy'] = ucwords($data['workerbrgy']);          
+        }
+
+        if($data['workertown']){
+            $data['workertown'] = ucwords($data['workertown']);          
+        }
+
+        if($data['workerprovince']){
+            $data['workerprovince'] = ucwords($data['workerprovince']);          
+        }
+
+
+
         if(\App\Worker::create($data)){
             return response()->json(['success' => true, 'msg' => 'Worker Successfully added!']);
         }else{
@@ -156,9 +158,9 @@ class WorkersController extends Controller
     public function update(Request $request, $id)
     {
         $data = request()->validate([
-        'workerfname' => 'required|max:25',
-        'workerlname' => 'required|max:25',
-        'workermname' => 'required|max:25',
+        'workerfname' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
+        'workerlname' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
+        'workermname' => 'required|max:25|regex:/^[a-zA-Z ]+$/',
         'workerbrgy' => 'required|max:25',
         'workertown' => 'required|max:25',
         'workergender' => 'required',
@@ -166,6 +168,7 @@ class WorkersController extends Controller
         'workerContactNo' => 'required|size:11|regex:/(09)[0-9]{9}/ ',
         'workerlevel' => 'required',
         'workertype' => 'required',
+        'status'    => 'required',
         'password' => 'nullable|min:6|max:20|same:confirm_password',
         ]);
 
@@ -174,6 +177,31 @@ class WorkersController extends Controller
         }else{
             unset($data['password']);
         }
+
+        if($data['workerfname']){
+            $data['workerfname'] = ucwords($data['workerfname']);          
+        }
+
+        if($data['workerlname']){
+            $data['workerlname'] = ucwords($data['workerlname']);          
+        }
+
+        if($data['workermname']){
+            $data['workermname'] = ucwords($data['workermname']);          
+        }
+
+        if($data['workerbrgy']){
+            $data['workerbrgy'] = ucwords($data['workerbrgy']);          
+        }
+
+        if($data['workertown']){
+            $data['workertown'] = ucwords($data['workertown']);          
+        }
+
+        if($data['workerprovince']){
+            $data['workerprovince'] = ucwords($data['workerprovince']);          
+        }
+
 
         if(Worker::find($id)->update($data)){
             return response()->json(['success' => true, 'msg' => 'Worker Successfully updated!']);

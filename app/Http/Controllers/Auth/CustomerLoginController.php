@@ -26,11 +26,11 @@ class CustomerLoginController extends Controller
     		'password' => 'required|min:6',
     	]);
 
-    	if(Auth::guard('customer')->attempt(['custUsername' => $request->custUsername, 'password' => $request->password], $request->remember)){ //If successful, then redirect to
+    	if(Auth::guard('customer')->attempt(['custUsername' => $request->custUsername, 'password' => $request->password, 'status' => 'Active'], $request->remember)){ //If successful, then redirect to
     		return redirect()->intended(route('customer.dashboard'));
     	} 
     	//If unsuccessful, http_redirect()
-    	return redirect()->back()->withInput($request->only('custUsername', 'remember'));
+    	return redirect()->back()->withInput($request->only('custUsername', 'remember'))->with('message', 'Login failed!');;
     }
 
     public function logout()

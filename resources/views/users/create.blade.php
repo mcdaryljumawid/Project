@@ -54,6 +54,10 @@
 						</div>
 
 						<div class="form-group">
+							<input type="hidden" class="form-control" id="status" name="status" value="Active">
+						</div> 
+ 
+						<div class="form-group">
                             <label class ="control-label col-sm-4">Role</label>
                             <div class="col-sm-7">
                             	<select class="select form-control " id="role" name="role" style="width: 200px">

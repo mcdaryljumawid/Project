@@ -34,10 +34,14 @@
 							<br><br><br>
 
 							<div class="col-sm-4"><strong><i>Service availed</i></strong></div> <br>
-							<div class="col-sm-4"><strong>Service:</strong></div> 
+							<div class="col-sm-4"><strong>Service:</strong></div>
 							<div class="col-sm-7">{{$appointment->service->servicename}}</div>
+
 							<div class="col-sm-4"><strong>Price:</strong></div> 
 							<div class="col-sm-7">{{$appointment->service->serviceprice}}</div>	<br>
+
+							<div class="col-sm-4"><strong>Remarks:</strong></div> 
+							<div class="col-sm-7">{{$APPOINTMENT->appointRemarks}}</div>	<br>
 						</div>	
 					</div>
 				</div>

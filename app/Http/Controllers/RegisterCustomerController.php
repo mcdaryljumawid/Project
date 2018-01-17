@@ -44,9 +44,9 @@ class RegisterCustomerController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([
-        'custfname' => 'required|max:25',
-        'custmname' => 'required|max:25',
-        'custlname' => 'required|max:25',
+        'custfname' => 'required|max:50|regex:/^[a-zA-Z ]+$/',
+        'custmname' => 'required|max:50|regex:/^[a-zA-Z ]+$/',
+        'custlname' => 'required|max:50|regex:/^[a-zA-Z ]+$/',
         'custContactNo' => 'required|unique:customers|min:11|size:11',
         'email' => 'required|unique:customers|email',
         'custUsername' => 'required|unique:customers|max:25',
@@ -59,15 +59,15 @@ class RegisterCustomerController extends Controller
         }
 
         if($data['custfname']){
-            $data['custfname'] = ucfirst($data['custfname']);          
+            $data['custfname'] = ucwords($data['custfname']);          
         }
 
         if($data['custmname']){
-            $data['custmname'] = ucfirst($data['custmname']);          
+            $data['custmname'] = ucwords($data['custmname']);          
         }
 
         if($data['custlname']){
-            $data['custlname'] = ucfirst($data['custlname']);          
+            $data['custlname'] = ucwords($data['custlname']);          
         }
 
         if(\App\Customer::create($data)){
