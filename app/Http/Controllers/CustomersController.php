@@ -34,12 +34,13 @@ class CustomersController extends Controller
         return Datatables::of($customers)
         ->addColumn('action', function ($customer){
             return '
+                    <div class="btn-group" style="display: flex;">
                     <button title="Edit Customer" class="btn btn-warning edit-data-btn" data-id="'.$customer->id.'">
                             <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button title="Delete Customer" class="btn btn-danger delete-data-btn" data-id="'.$customer->id.'">
                             <span class="glyphicon glyphicon-trash"></span>
-                    </button>';
+                    </button></div>';
         })
         ->make(true);
     }

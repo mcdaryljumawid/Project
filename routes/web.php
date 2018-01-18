@@ -87,6 +87,7 @@ Route::patch('transactions/{transaction}/adddetails', 'TransactionsController@ad
 //transactions
 Route::get('select-service/{data}', 'TransactionsController@selectService')->name('select-service');
 Route::get('select-worker/{data}', 'TransactionsController@selectWorker')->name('select-worker');
+
 Route::get('transactions/{transaction}/generatebill', 'TransactionsController@generatebill')->name('transactions.generatebill');
 Route::patch('transactions/{transaction}/finalizepayment', 'TransactionsController@finalizepayment')->name('transactions.finalizepayment');
 Route::get('transactions/{transaction}/transactiondetails', 'TransactionsController@transactiondetails')->name('transactions.transactiondetails');
@@ -102,5 +103,38 @@ Route::get('workers/{workerId}/appointments', 'WorkerAppointmentController@index
 //getservice filtered
 Route::get('get_services_by_category/{category}', 'ServicesController@get_services_by_category');
 
+//WORKER
+//workerappointment
+Route::get('/worker/myappointments', 'WorkerController@myappointments')->name('worker.myappointments');
+Route::get('/worker/getpendingappointments', 'WorkerController@getpendingappointments')->name('worker.getpendingappointments');
+Route::get('/worker/getappointments', 'WorkerController@getappointments')->name('worker.getappointments');
+Route::get('/worker/viewappointmentdetails/{appointment}', 'WorkerController@viewappointmentdetails')->name('worker.viewappointmentdetails');
+
+//workertransaction
+Route::get('/worker/mytransactions', 'WorkerController@mytransactions')->name('worker.mytransactions');
+Route::get('/worker/gettransactionhistory', 'WorkerController@gettransactionhistory')->name('worker.gettransactionhistory');
+
+//CUSTOMER
+//customerappointments
+Route::get('/customer/myappointments', 'CustomerController@myappointments')->name('customer.myappointments');
+Route::get('/customer/getpendingappointments', 'CustomerController@getpendingappointments')->name('customer.getpendingappointments');
+Route::get('/customer/getappointments', 'CustomerController@getappointments')->name('customer.getappointments');
+Route::get('/customer/viewappointmentdetails/{appointment}', 'CustomerController@viewappointmentdetails')->name('customer.viewappointmentdetails');
+Route::get('/customer/addappointment', 'CustomerController@addappointment')->name('customer.addappointment');
+Route::post('/customer/storeappointment', 'CustomerController@storeappointment')->name('customer.storeappointment');
+
+//filter
+Route::get('addappointment/select-service/{data}', 'CustomerController@selectService')->name('addappointment.selectservice');
+Route::get('addappointment/select-worker/{data}', 'CustomerController@selectWorker')->name('addappointment.selectworker');
+
+//customerappointment -- reschedule
+Route::get('customer/{appointment}/rescheduleform', 'CustomerController@rescheduleform')->name('customer.rescheduleform');
+Route::patch('customer/{appointment}', 'CustomerController@reschedule')->name('customer.reschedule');
+//customerappointment -- cancel
+Route::get('customer/{appointment}/cancelform', 'CustomerController@cancelform')->name('customer.cancelform');
+Route::patch('customer/{appointment}/cancel', 'CustomerController@cancel')->name('customer.cancel');
+
+
+//Route::post('worker/bookappointment', 'WorkerController@bookappointment')->name('worker.bookappointment');
 
 

@@ -14,8 +14,8 @@
 
 <div>
 <button class="add-data-btn btn btn-success">Add User</button>
-<table id="users-table" class="table">
-	<thead>
+<table id="users-table" class="table" style="font-size: 15px;">
+	<thead style="font-weight: bold;">
 		<tr>
 			<td>User ID</td>
 			<td>Firstname</td>
@@ -26,6 +26,17 @@
 			<td>Actions</td>
 		</tr>
 	</thead>
+  <tfoot style="font-weight: bold;">
+    <tr>
+      <td>User ID</td>
+      <td>Firstname</td>
+      <td>Middlename</td>
+      <td>Lastname</td>
+      <td>Role</td>
+      <td>Status</td>
+      <td>Actions</td>
+    </tr>
+  </tfoot>
 </table>
 
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="addmodal"></div>
@@ -37,6 +48,37 @@
               bProcessing: true,
               bServerSide: false,
               sServerMethod: "GET",
+              dom: 'Bfrtip',
+                buttons: [
+                {
+                  extend: 'copy',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                  },
+                  title: 'Moley Boley | Users'
+                },
+                {
+                  extend: 'excel',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                  },
+                  title: 'Moley Boley | Users'
+                },
+                {
+                  extend: 'pdf',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                  },
+                  title: 'Moley Boley | Users'
+                },
+                {
+                  extend: 'print',
+                   exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                  },
+                  title: 'Moley Boley | Users'
+                },
+                ],
             ajax: '/users/get_datatable',
             columns: [
                 {data: 'id', name: 'id', className: 'col-md-1 text-left'},
@@ -51,7 +93,26 @@
             this.api().columns(4).every( function () {
                 var column = this;
                 var select = $('<select><option value="">Role</option></select>')
-                    .appendTo( $(column.header()).empty() )
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+
+            this.api().columns(5).every( function () {
+                var column = this;
+                var select = $('<select><option value="">Status</option></select>')
+                    .appendTo( $(column.footer()).empty() )
                     .on( 'change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()

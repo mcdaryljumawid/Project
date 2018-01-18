@@ -15,21 +15,36 @@
 
 
 <div>
-    <button class="add-data-btn btn btn-success">Add Customer</button>
-<table id="customers-table" class="table">
-	<thead>
+  <div align="center">
+    <button class="add-data-btn btn btn-success">Add New Customer</button>
+  </div>
+<table id="customers-table" class="table" style="font-size: 15px;">
+	<thead style="font-weight: bold;">
 		<tr>
 			<td>ID</td>
 			<td>Username</td>
 			<td>Firstname</td>
 			<td>Middlename</td>
 			<td>Lastname</td>
-            <td>Gender</td>
-            <td>Contact No.</td>
-            <td>E-mail</td>
+      <td>Gender</td>
+      <td>Contact No.</td>
+      <td>E-mail</td>
 			<td>Actions</td>
 		</tr>
 	</thead>
+  <tfoot style="font-weight: bold;">
+    <tr>
+      <td>ID</td>
+      <td>Username</td>
+      <td>Firstname</td>
+      <td>Middlename</td>
+      <td>Lastname</td>
+      <td>Gender</td>
+      <td>Contact No.</td>
+      <td>E-mail</td>
+      <td>Actions</td>
+    </tr>
+  </tfoot>
 </table>
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="addmodal"></div>
@@ -41,6 +56,37 @@
                 bprocessing: true,
                 sServerSide: false,
                 sServerMethod: "GET",
+                dom: 'Bfrtip',
+                buttons: [
+                {
+                  extend: 'copy',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                  },
+                  title: 'Moley Boley | Customers'
+                },
+                {
+                  extend: 'excel',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                  },
+                  title: 'Moley Boley | Customers'
+                },
+                {
+                  extend: 'pdf',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                  },
+                  title: 'Moley Boley | Customers'
+                },
+                {
+                  extend: 'print',
+                   exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                  },
+                  title: 'Moley Boley | Customers'
+                },
+                ],
             ajax: '/customers/get_datatable',
             columns: [
                 {data: 'id', name: 'id', className: 'col-md-1 text-left'},

@@ -24,15 +24,6 @@
 
 							<br><br><br>
 
-							<div class="col-sm-4"><strong><i>Worker Assigned</i></strong></div><br>
-							<div class="col-sm-4"><strong>Lastname:</strong></div> 
-							<div class="col-sm-7">{{$appointment->worker->workerlname}}</div>
-
-							<div class="col-sm-4"><strong>Firstname:</strong></div> 
-							<div class="col-sm-7">{{$appointment->worker->workerfname}}</div>
-
-							<br><br><br>
-
 							<div class="col-sm-4"><strong><i>Service availed</i></strong></div> <br>
 							<div class="col-sm-4"><strong>Service:</strong></div>
 							<div class="col-sm-7">{{$appointment->service->servicename}}</div>
@@ -41,7 +32,7 @@
 							<div class="col-sm-7">{{$appointment->service->serviceprice}}</div>	<br>
 
 							<div class="col-sm-4"><strong>Remarks:</strong></div> 
-							<div class="col-sm-7">{{$appointment->appointRemarks}}</div>	<br>
+							<div class="col-sm-7">{{$appointment->appointRemarks}}</div><br>
 						</div>	
 					</div>
 				</div>

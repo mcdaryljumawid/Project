@@ -17,8 +17,8 @@
 <button class="add-data-btn btn btn-success">Add Appointment</button><br><br>
   <h4><strong> Pending appointments </strong></h4>
   </div>
-<table id="appointments-table" class="table">
-	<thead>
+<table id="appointments-table" class="table" style="font-size: 15px;">
+	<thead style="font-weight: bold;">
 		<tr>
 			<td>ID</td>
 			<td>Date and Time</td>
@@ -35,8 +35,8 @@
 <div align="center">
   <h4><strong> Appointment history </strong></h4>
   </div>
-<table id="appointment-history-table" class="table">
-  <thead>
+<table id="appointment-history-table" class="table" style="font-size: 15px;">
+  <thead style="font-weight: bold;">
     <tr>
       <td>ID</td>
       <td>Date and Time</td>

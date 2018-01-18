@@ -15,33 +15,19 @@
 
 							<br><br><br>
 
-							<div class="col-sm-4"><strong><i>Customer</i></strong></div><br>
-							<div class="col-sm-4"><strong>Lastname:</strong></div> 
-							<div class="col-sm-7">{{$appointment->customer->custlname}}</div>
-
-							<div class="col-sm-4"><strong>Firstname:</strong></div> 
-							<div class="col-sm-7">{{$appointment->customer->custfname}}</div>
-
-							<br><br><br>
-
-							<div class="col-sm-4"><strong><i>Worker Assigned</i></strong></div><br>
-							<div class="col-sm-4"><strong>Lastname:</strong></div> 
-							<div class="col-sm-7">{{$appointment->worker->workerlname}}</div>
-
-							<div class="col-sm-4"><strong>Firstname:</strong></div> 
-							<div class="col-sm-7">{{$appointment->worker->workerfname}}</div>
-
-							<br><br><br>
+							<div class="col-sm-4"><strong><i>Worker assigned</i></strong></div> <br>
+							<div class="col-sm-4"><strong>Worker:</strong></div>
+							<div class="col-sm-7">{{$appointment->worker->workerlname}}, {{$appointment->worker->workerfname}}</div><br><br>
 
 							<div class="col-sm-4"><strong><i>Service availed</i></strong></div> <br>
 							<div class="col-sm-4"><strong>Service:</strong></div>
-							<div class="col-sm-7">{{$appointment->service->servicename}}</div>
-
+							<div class="col-sm-7">{{$appointment->service->servicename}}</div><br>
+							<br>
 							<div class="col-sm-4"><strong>Price:</strong></div> 
 							<div class="col-sm-7">{{$appointment->service->serviceprice}}</div>	<br>
 
 							<div class="col-sm-4"><strong>Remarks:</strong></div> 
-							<div class="col-sm-7">{{$appointment->appointRemarks}}</div>	<br>
+							<div class="col-sm-7">{{$appointment->appointRemarks}}</div><br>
 						</div>	
 					</div>
 				</div>

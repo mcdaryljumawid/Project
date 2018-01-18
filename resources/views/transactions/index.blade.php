@@ -18,14 +18,13 @@
 <a href="{{ url('/customers') }}"> Click me for new customer. </a>
   <h4><strong> Pending transactions </strong></h4>
   </div>
-<table id="transactions-table" class="table">
-	<thead>
+<table id="transactions-table" class="table" style="font-size: 15px;">
+	<thead style="font-weight: bold;">
 		<tr>
 			<td>Transaction ID</td>
 			<td>Date and Time</td>
       <td>Handling user</td>
 			<td>Customer</td>
-      <td>Status</td>
 			<td>Actions</td>
 		</tr>
 	</thead>
@@ -34,14 +33,14 @@
 <div align="center">
   <h4><strong> Closed transactions </strong></h4>
 </div>
-<table id="closed-transactions-table" class="table">
-  <thead>
+<table id="closed-transactions-table" class="table" style="font-size: 15px;">
+  <thead style="font-weight: bold;">
     <tr>
       <td>Transaction ID</td>
       <td>Date and Time</td>
       <td>Handling user</td>
       <td>Customer</td>
-      <td>Status</td>
+      <td>Bill</td>
       <td>Actions</td>
     </tr>
   </thead>
@@ -66,7 +65,6 @@
                 {data: 'datetime', name: 'datetime', className: 'col-md-1 text-left'},
                 {data: 'handlinguser', name: 'handlinguser', className: 'col-md-1 text-left'},
                 {data: 'customername', name: 'customername', className: 'col-md-1 text-left'},
-                {data: 'status', name: 'status', className: 'col-md-1 text-left', orderable: false,},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false, searchable: false}
             ],
         });
@@ -82,7 +80,7 @@
                 {data: 'datetime', name: 'datetime', className: 'col-md-1 text-left'},
                 {data: 'handlinguser', name: 'handlinguser', className: 'col-md-1 text-left'},
                 {data: 'customername', name: 'customername', className: 'col-md-1 text-left'},
-                {data: 'status', name: 'status', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'bill', name: 'bill', className: 'col-md-1 text-left'},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false, searchable: false}
             ],
         });

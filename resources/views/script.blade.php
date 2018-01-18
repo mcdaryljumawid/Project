@@ -6,6 +6,14 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.0.0/jquery.mark.min.js"></script>
 <script src="{{asset('js/sweetalert.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<!--<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>-->
+<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="/js/jszip.min.js"></script>
+<script type="text/javascript" src="/js/pdfmake.min.js"></script>
+<script type="text/javascript" src="/js/vfs_fonts.js"></script>
+<script type="text/javascript" src="/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="/js/buttons.html5.min.js"></script>
 <!--<script src="{{ asset('js/app.js') }}"></script>-->
 <script type="text/javascript">
 	function associate_errors(errors, $form)

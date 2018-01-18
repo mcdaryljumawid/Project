@@ -58,9 +58,6 @@ class TransactionsController extends Controller
         ->addColumn('customername', function($transaction){
             return $transaction->customer->custlname.", ".$transaction->customer->custfname;
         })
-        ->addColumn('status', function($transaction){
-            return $transaction->transactStatus;
-        })
         ->addColumn('action', function ($transaction){
             return '
                     <div class="btn-group" style="display: flex;">
@@ -94,8 +91,8 @@ class TransactionsController extends Controller
         ->addColumn('customername', function($transaction){
             return $transaction->customer->custlname.", ".$transaction->customer->custfname;
         })
-        ->addColumn('status', function($transaction){
-            return $transaction->transactStatus;
+         ->addColumn('bill', function($transaction){
+            return $transaction->transactBill;
         })
         ->addColumn('action', function ($transaction){
             return '
@@ -267,7 +264,6 @@ class TransactionsController extends Controller
 
     public function selectWorker(Request $request, $data)
     {
-
 
         $types = ["All-around (Rebond specialized)","All-around (Haircut specialized)"];
         if($request->ajax())

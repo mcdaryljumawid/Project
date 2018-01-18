@@ -15,12 +15,12 @@
 			</div>
 			<div class="collapse navbar-collapse navbar-right" id="navbar-collapse" >
 				<ul class="nav navbar-nav">
-					<li><a href="{{ url('/') }}">Home</a>
-					<li><a href="services.php">Services</a>
+					<li class="{{ Request::is('/') ? 'active': '' }}"><a href="{{ url('/') }}">Home</a>
+					<li class="{{ Request::is('services') ? 'active': '' }}"><a href="services.php">Services</a>
 					<li><a href="about_us.php">About Us</a>
 					<li><a href="contact_us.php">Contact Us</a>
 					<li><a href="{{ url('/registercustomer') }}">Register</a>
-					<li><a href="{{ url('/logindirect') }}">Log in</a>
+					<li class="{{ Request::is('logindirect') ? 'active': '' }}"><a href="{{ url('/logindirect') }}">Log in</a>
 				</ul>
 			</div>
 		</div>

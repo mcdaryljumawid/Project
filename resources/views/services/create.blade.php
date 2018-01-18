@@ -37,8 +37,8 @@
                             <label class ="control-label col-sm-4">Service Type</label>
                             <div class="col-sm-7">
                             	<select class="select form-control " id="servicetype" name="servicetype" style="width: 200px">
+                            		<option value="Minor">Minor</option>
                                 	<option value="Major">Major</option>
-                                    <option value="Minor">Minor</option>
                                 </select>
                             </div>
                         </div>

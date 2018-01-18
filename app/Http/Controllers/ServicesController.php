@@ -36,12 +36,13 @@ class ServicesController extends Controller
         return Datatables::of($services)
         ->addColumn('action', function ($service){
             return '
+                    <div class="btn-group" style="display: flex;">
                     <button title="Edit Service Details" class="btn btn-warning edit-data-btn" data-id="'.$service->id.'">
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
                     <button title="Delete Service" class="btn btn-danger delete-data-btn" data-id="'.$service->id.'">
                         <span class="glyphicon glyphicon-trash"></span>
-                    </button>';
+                    </button></div>';
         })
         ->make(true);
     }
@@ -66,7 +67,7 @@ class ServicesController extends Controller
     public function store(Request $request)
     {
         $data = request()->validate([
-        'servicename'       => 'required|unique:services|max:50|regex:/^[a-zA-Z ]+$/',
+        'servicename'       => 'required|unique:services|max:50|string',
         'serviceprice'      => 'required|numeric|min:1',
         'serviceduration'   => 'required|numeric|min:1',
         'servicetype'       => 'required',
@@ -156,12 +157,16 @@ class ServicesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
+    {   try{
         if(Service::destroy($id)){
             return response()->json(['success' => true, 'msg' => 'Service successfully deleted!']);
         }else{
             return response()->json(['success' => false, 'msg' => 'An error occured while deleting service!']);
         }
+        }catch (\Illuminate\Database\QueryException $e){
+            return response()->json(['success' => false, 'msg' => 'Service cannot be deleted!']);
+        }        
+
     }
 
     public function get_services_by_category($category){

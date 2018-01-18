@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
+use Yajra\DataTables\Facades\Datatables;
 
 class WorkerController extends Controller
 {
@@ -53,6 +55,121 @@ class WorkerController extends Controller
         $user->save();
  
         return redirect()->back()->with("success","Password changed successfully !");
- 
-    }  
+    } 
+
+    public function myappointments()
+    {
+        return view('worker.myappointments');
+    }
+
+    public function getpendingappointments()
+    {
+        $appointments = \App\Appointment::
+            where('worker_id', Auth::user()->id)
+            ->where('appointStatus', "Pending")
+            ->get();
+            
+
+        return Datatables::of($appointments)
+       ->addColumn('id', function($appointment){
+            return $appointment->id;
+        })
+        ->addColumn('datetime', function($appointment){
+            return date('M d, Y h:i A', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('customername', function($appointment){
+            return $appointment->customer->custlname.", ".$appointment->customer->custfname;
+        })
+        ->addColumn('service', function($appointment){
+            return $appointment->service->servicename;
+        })
+        ->addColumn('action', function ($appointment){
+            return '
+                    <div class="btn-group" style="display: flex;">
+                    <button title="View Appointment Details" class="btn btn-primary view-data-btn" data-id="'.$appointment->id.'">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    </div>';
+        })
+        ->make(true);
+    }
+
+    public function getappointments()
+    {
+        $status = ["Cancelled", "Closed"];
+
+        $appointments = \App\Appointment::
+            where('worker_id', Auth::user()->id)
+            ->wherein('appointStatus', $status)
+            ->get();
+            
+
+        return Datatables::of($appointments)
+       ->addColumn('id', function($appointment){
+            return $appointment->id;
+        })
+        ->addColumn('datetime', function($appointment){
+            return date('M d, Y h:i A', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('customername', function($appointment){
+            return $appointment->customer->custlname.", ".$appointment->customer->custfname;
+        })
+        ->addColumn('service', function($appointment){
+            return $appointment->service->servicename;
+        })
+        ->addColumn('action', function ($appointment){
+            return '
+                    <div class="btn-group" style="display: flex;">
+                    <button title="View Appointment Details" class="btn btn-primary view-data-btn" data-id="'.$appointment->id.'">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    </div>';
+        })
+        ->make(true);
+    }
+
+    public function viewappointmentdetails($id)
+    {
+        $appointment = \App\Appointment::findOrFail($id);
+        //dd($userEdit->id);
+        return view('worker.viewappointmentdetails')->with('appointment',$appointment);
+    }
+
+    public function mytransactions()
+    {
+        return view('worker.mytransactions');
+    }
+
+    public function gettransactionhistory()
+    {
+        $transactions = \App\Transaction::where('transactStatus', "Closed")
+        ->select('id')
+        ->get();
+
+        $transactiondetails = \App\TransactionDetail::
+        where('worker_id', Auth::user()->id)
+        ->wherein('transaction_id', $transactions)
+        ->get();
+
+        return Datatables::of($transactiondetails)
+        ->addColumn('id', function($transactiondetail){
+            return $transactiondetail->transaction_id;
+        })
+        ->addColumn('datetime', function($transactiondetail){
+            return date('M d, Y h:i A', strtotime($transactiondetail->transaction->created_at));
+        })
+        ->addColumn('handlinguser', function($transactiondetail){
+            return $transactiondetail->transaction->user->lastname.", ".$transactiondetail->transaction->user->firstname;
+        })
+        ->addColumn('customername', function($transactiondetail){
+            return $transactiondetail->transaction->customer->custlname.", ".$transactiondetail->transaction->customer->custfname;
+        })
+        ->addColumn('service', function($transactiondetail){
+            return $transactiondetail->service->servicename;
+        })
+         ->addColumn('bill', function($transactiondetail){
+            return $transactiondetail->transaction->transactBill;
+        })
+        ->make(true);
+    }
 }

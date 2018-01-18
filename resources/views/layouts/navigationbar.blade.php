@@ -24,13 +24,13 @@
                 <ul class="nav navbar-nav">
                     @if (Auth::guard('customer')->check())
                         <li class="{{ Request::is('customer') ? 'active': '' }}"><a href="{{ url('/customer') }}">Dashboard</a>
-                        <li><a href="appointment.php">My Appointments</a>
+                        <li class="{{ Request::is('customer/myappointments') ? 'active': '' }}""><a href="{{ url('/customer/myappointments') }}">My Appointments</a>
                         <li><a href="transaction_and_bill.php">My Transactions</a>
                     @elseif (Auth::guard('worker')->check())
-                        <li><a href="appointment.php">My Appointments</a>
-                        <li><a href="transaction_and_bill.php">My Transactions</a>
-                        <li><a href="gross_income.php"></a>
-                        <li><a href="generatereport.php">Generate Reports</a>
+                        <li class="{{ Request::is('worker') ? 'active': '' }}"><a href="{{ url('/worker') }}">Dashboard</a>
+                        <li class="{{ Request::is('worker/myappointments') ? 'active': '' }}"><a href="{{ url('/worker/myappointments') }}">My Appointments</a>
+                        <li class="{{ Request::is('worker/transactions') ? 'active': '' }}""><a href="{{ url('/worker/mytransactions') }}">My Transactions</a>
+                            <li><a href="transaction_and_bill.php">Gross Income</a>
                     @elseif (Auth::user()->role == "Manager")
                         <li class="{{ Request::is('users') ? 'active': '' }}"><a href="{{ url('/users') }}">Users</a>
                         <li class="{{ Request::is('workers') ? 'active': '' }}"><a href="{{ url('/workers') }}">Workers</a>
@@ -54,9 +54,13 @@
                                    <strong> Welcome </strong> &nbsp; 
                                     @if (Auth::guard('customer')->check())
                                         {{ Auth::user()->custlname }}, {{ Auth::user()->custfname }}
-                                    @elseif (Auth::guard('worker')->check())
+                                    @endif
+
+                                    @if (Auth::guard('worker')->check())
                                         {{ Auth::user()->workerlname }}, {{ Auth::user()->workerfname }}
-                                    @else
+                                    @endif
+
+                                    @if(Auth::guard('customer')->check() != true && Auth::guard('worker')->check() != true)
                                         {{ Auth::user()->lastname }}, {{ Auth::user()->firstname }}
                                     @endif 
                                      <span class="caret"></span>

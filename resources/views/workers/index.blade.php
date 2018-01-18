@@ -14,8 +14,8 @@
 
 <div>
 <button class="add-data-btn btn btn-success">Add Worker</button>
-<table id="workers-table" class="table">
-	<thead>
+<table id="workers-table" class="table" style="font-size: 15px;">
+	<thead style="font-weight: bold;">
 		<tr>
 			<td>Worker ID</td>
 			<td>Firstname</td>
@@ -27,6 +27,18 @@
 			<td>Actions</td>
 		</tr>
 	</thead>
+  <tfoot style="font-weight: bold;">
+    <tr>
+      <td>Worker ID</td>
+      <td>Firstname</td>
+      <td>Middlename</td>
+      <td>Lastname</td>
+      <td>Level</td>
+      <td>Type</td>
+      <td>Status</td>
+      <td>Actions</td>
+    </tr>
+  </tfoot>
 </table>
 
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="viewmodal"></div>
@@ -40,6 +52,37 @@
             bProcessing: true,
             bServerSide: false,
             sServerMethod: "GET",
+            dom: 'Bfrtip',
+                buttons: [
+                {
+                  extend: 'copy',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                  },
+                  title: 'Moley Boley | Workers'
+                },
+                {
+                  extend: 'excel',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                  },
+                  title: 'Moley Boley | Workers'
+                },
+                {
+                  extend: 'pdf',
+                  exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                  },
+                  title: 'Moley Boley | Workers'
+                },
+                {
+                  extend: 'print',
+                   exportOptions:{
+                    columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                  },
+                  title: 'Moley Boley | Workers'
+                },
+                ],
             ajax: '/workers/get_datatable',
             columns: [
                 {data: 'id', name: 'id', className: 'col-md-1 text-left'},
@@ -55,7 +98,64 @@
             this.api().columns(4).every( function () {
                 var column = this;
                 var select = $('<select><option value="">Level</option></select>')
-                    .appendTo( $(column.header()).empty() )
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+
+            this.api().columns(0).every( function () {
+                var column = this;
+                var select = $('<select><option value="">Worker ID</option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+
+            this.api().columns(5).every( function () {
+                var column = this;
+                var select = $('<select><option value="">Type</option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+
+            this.api().columns(6).every( function () {
+                var column = this;
+                var select = $('<select><option value="">Status</option></select>')
+                    .appendTo( $(column.footer()).empty() )
                     .on( 'change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
@@ -71,6 +171,7 @@
                 } );
             } );
         },
+
         });
 
         $(".add-data-btn").click(function(x){  
