@@ -14,8 +14,8 @@
 
 <div>
   <div align="center">
-<button class="add-data-btn btn btn-success">Add Transaction</button><br><br>
-<a href="{{ url('/customers') }}"> Click me for new customer. </a>
+<button class="add-walkin-btn btn btn-success">Walk-in Transaction</button>&nbsp;
+<button class="add-registered-btn btn btn-success">Registered Customer Transaction</button><br><br>
   <h4><strong> Pending transactions </strong></h4>
   </div>
 <table id="transactions-table" class="table" style="font-size: 15px;">
@@ -49,6 +49,7 @@
 <br><br>
 
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="add-transaction"></div>
+   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="add-walkin-transaction"></div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="add-transaction-details"></div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="generatebill"></div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="transactiondetails"></div>
@@ -85,7 +86,7 @@
             ],
         });
 //call the modal from the triggering button
-        $(".add-data-btn").click(function(x){  
+        $(".add-registered-btn").click(function(x){  
               x.preventDefault();
               var that = this;
               $("#add-transaction").html('');
@@ -94,6 +95,19 @@
                 url: '/transactions/create',         
                 success: function(data) {
                   $("#add-transaction").html(data);
+                }
+              }); 
+        });
+
+        $(".add-walkin-btn").click(function(x){  
+              x.preventDefault();
+              var that = this;
+              $("#add-walkin-transaction").html('');
+              $("#add-walkin-transaction").modal();
+              $.ajax({
+                url: '/transactions_walkinform',         
+                success: function(data) {
+                  $("#add-walkin-transaction").html(data);
                 }
               }); 
         });

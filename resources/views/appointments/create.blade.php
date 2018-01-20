@@ -10,7 +10,11 @@
         		<form class="form-horizontal" method="POST" action="/appointments" id="add-appointments-form">
 					{{ csrf_field() }}
         			<div class="modal-body">
-
+                @if(Session::get('message') !== null)
+                <div class="alert alert-block alert-danger" align="center">
+                {{ Session::get('message') !== null ? Session::get('message') : '' }}
+                </div>
+                @endif
 						<div class="form-group">
 							<label class="control-label col-sm-4">Date and Time</label>
 							<div class="col-sm-7">
@@ -60,7 +64,7 @@
                             <div class="col-sm-7">
                             	<select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
                                 </select>
-								<span class="help-text text-danger"></span>
+								                <span class="help-text text-danger"></span>
                             </div>
                         </div>
 
@@ -74,7 +78,7 @@
                 <p>Eum ea quidam oportere imperdiet, facer oportere vituperatoribus eu vix, mea ei iisque legendos hendrerit. Blandit comprehensam eu his, ad eros veniam ridens eum. Id odio lobortis elaboraret pro. Vix te fabulas partiendo.</p>
                 <p>Natum oportere et qui, vis graeco tincidunt instructior an, autem elitr noster per et. Mea eu mundi qualisque. Quo nemore nusquam vituperata et, mea ut abhorreant deseruisse, cu nostrud postulant dissentias qui. Postea tincidunt vel eu.</p>
                 <p>Ad eos alia inermis nominavi, eum nibh docendi definitionem no. Ius eu stet mucius nonumes, no mea facilis philosophia necessitatibus. Te eam vidit iisque legendos, vero meliore deserunt ius ea. An qui inimicus inciderint.</p>
-            </div>
+            </div><span class="help-text text-danger"></span>
         </div>
     </div>
 
@@ -82,7 +86,7 @@
         <div class="col-xs-6 col-xs-offset-3">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="agree" value="1"/> Agree with the terms and conditions <span class="help-text text-danger"></span>            
+                    <input type="checkbox" name="agree" value="1"/> Agree with the terms and conditions            
                 </label>
             </div>
         </div>
@@ -90,7 +94,7 @@
 
 		        		<div class="modal-footer">
 		        			<div align="center">
-		        				<div class="submit-btn btn btn-success">Add Appointment</div>
+		        				<div class="submit-btn btn btn-success" onclick="if(!this.form.checkbox.checked){alert('You must agree to the terms first.');return false}">Add Appointment</div>
 								<!-- <button type="submit" class="btn btn-primary">Add User</button> -->
 								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							</div>
@@ -139,7 +143,7 @@
       var that = this;
       var token = $("input[name='_token']").val();
       $.ajax({
-              url: "{{url('select-service')}}/"+servicecategory,
+              url: "{{url('select-service-appointment')}}/"+servicecategory,
               method: 'GET',
               success: function(data) {
                 $("select[name='service_id'").html('');
@@ -155,7 +159,7 @@
           var that = this;
           var token = $("input[name='_token']").val();
           $.ajax({
-                  url: "{{url('select-worker')}}/"+service_id,
+                  url: "{{url('select-worker-appointment')}}/"+service_id,
                   method: 'GET',
                   success: function(data) {
                     $("select[name='worker_id'").html('');

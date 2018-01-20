@@ -105,9 +105,51 @@ class TransactionsController extends Controller
 
     public function create()
     {
-        $customers = Customer::all();
+        $ids = Transaction::
+        where('transactStatus', "Pending")
+        ->select('customer_id')
+        ->get();
+
+        $customers = Customer::
+        where('id', '!=', 1)
+        //->wherein('id', '!=', $ids)
+        ->get();
 
         return view('transactions.create', compact('customers'));
+    }
+
+    public function walkinform()
+    {
+
+        return view('transactions.walkinform');
+    }
+
+    public function addwalkin(Request $request)
+    {
+        $transaction = \App\Transaction::create([
+            'customer_id' => $request->customer_id,
+            'transactStatus' => "Pending",
+            'transactBill' => 0, 
+            'user_id' => Auth::user()->id,
+        ]);
+
+        if(\App\TransactionDetail::create([
+            'service_id' => $request->service_id,
+            'worker_id'  => $request->worker_id,
+            'transaction_id' => $transaction->id,
+            'workergrossincome' => 0,
+            'companygrossincome' => 0,
+        ]))
+        {
+            Worker::find($request->worker_id)->update([
+                'availability' => 0,
+            ]);
+
+            return response()->json(['success' => true, 'msg' => 'Transaction from Successfully Created!']);
+        }else{
+             return response()->json(['success' => false, 'msg' => 'Transaction Not Created!']);
+        }
+
     }
 
     /**
@@ -128,11 +170,28 @@ class TransactionsController extends Controller
          $trans->user_id = Auth::user()->id;
          $trans->customer_id = $request->customer_id;
 
-         if($trans->save()){
+         $trans->save();
+         
+
+         if(\App\TransactionDetail::create([
+            'service_id' => $request->service_id,
+            'worker_id'  => $request->worker_id,
+            'transaction_id' => $trans->id,
+            'workergrossincome' => 0,
+            'companygrossincome' => 0,
+        ]))
+        {
+            Worker::find($request->worker_id)->update([
+                'availability' => 0,
+            ]);
+
             return response()->json(['success' => true, 'msg' => 'Transaction Successfully Created!']);
         }else{
-            return response()->json(['success' => false, 'msg' => 'An error occured while creating transaction!']);
+             return response()->json(['success' => false, 'msg' => 'Transaction Not Created!']);
         }
+
+        
+
     }
 
     /**
@@ -174,7 +233,12 @@ class TransactionsController extends Controller
 
     public function deletetransactiondetails($id)
     {
+        $transactiondetail = TransactionDetail::find($id);
+
          if(TransactionDetail::destroy($id)){
+            Worker::find($transactiondetail->worker_id)->update([
+                'availability' => 1,
+            ]);
             return response()->json(['success' => true, 'msg' => 'Transaction Detail Successfully deleted!']);
         }else{
             return response()->json(['success' => false, 'msg' => 'An error occured while deleting transaction detail!']);
@@ -208,6 +272,10 @@ class TransactionsController extends Controller
                 'workergrossincome' => $workergrossincome,
                 'companygrossincome' => $companygrossincome,
             ]);
+
+             Worker::find($transactiondetail->worker_id)->update([
+                'availability' => 1,
+             ]);
         }
 
         if(Transaction::find($id)->update([
@@ -244,6 +312,11 @@ class TransactionsController extends Controller
          $transactiondetails->transaction_id = $request->transaction_id;
 
          if($transactiondetails->save()){
+
+            Worker::find($request->worker_id)->update([
+                'availability' => 0,
+            ]);
+
             return response()->json(['success' => true, 'msg' => 'Transaction Details Successfully Created!']);
         }else{
             return response()->json(['success' => false, 'msg' => 'An error occured while creating transaction details!']);
@@ -272,19 +345,31 @@ class TransactionsController extends Controller
 
             if($service->servicename === "Hair Cut (Men)")
             {
-                $workers = Worker::where('workertype', "Barber")->get();
+                $workers = Worker::
+                where('workertype', "Barber")
+                ->where('availability', 1)
+                ->get();
             }
-            else if($service->servicename === "Rebond")
+            else if($service->servicename === "Hair Rebond")
             {
-                $workers = Worker::where('workertype', "All-around (Rebond specialized)")->get();
+                $workers = Worker::
+                where('workertype', "All-around (Rebond specialized)")
+                ->where('availability', 1)
+                ->get();
             }
             else if($service->servicename === "Hair Cut (Women)")
             {
-                $workers = Worker::where('workertype', "All-around (Haircut specialized)")->get();
+                $workers = Worker::
+                where('workertype', "All-around (Haircut specialized)")
+                ->where('availability', 1)
+                ->get();
             }
             else
             {
-                $workers = Worker::wherein('workertype', $types)->get();
+                $workers = Worker::
+                wherein('workertype', $types)
+                ->where('availability', 1)
+                ->get();
             }
             /*$data = ->render();
             return response()->json(['options'=>$data]);*/

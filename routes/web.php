@@ -82,16 +82,22 @@ Route::patch('appointments/{appointment}/appointmenttransaction', 'AppointmentsC
 
 //Route::patch('appointments/{appointment}', 'AppointmentsController@cancel')->name('appointments.cancel');
 //transaction add transaction details
+
 Route::get('transactions/{transaction}/adddetailsform', 'TransactionsController@adddetailsform')->name('transactions.adddetailsform');
 Route::patch('transactions/{transaction}/adddetails', 'TransactionsController@adddetails')->name('transactions.adddetails');
-//transactions
+
+//transactions 
 Route::get('select-service/{data}', 'TransactionsController@selectService')->name('select-service');
 Route::get('select-worker/{data}', 'TransactionsController@selectWorker')->name('select-worker');
+
+Route::get('transactions_walkinform', 'TransactionsController@walkinform')->name('transactions.walkinform');
+Route::patch('transactions_addwalkin', 'TransactionsController@addwalkin')->name('transactions.addwalkin');
 
 Route::get('transactions/{transaction}/generatebill', 'TransactionsController@generatebill')->name('transactions.generatebill');
 Route::patch('transactions/{transaction}/finalizepayment', 'TransactionsController@finalizepayment')->name('transactions.finalizepayment');
 Route::get('transactions/{transaction}/transactiondetails', 'TransactionsController@transactiondetails')->name('transactions.transactiondetails');
 Route::delete('transactions/{transaction}/deletetransactiondetails', 'TransactionsController@deletetransactiondetails')->name('transactions.deletetransactiondetails');
+
 
 //appointments
 Route::get('select-service-appointment/{data}', 'AppointmentsController@selectService')->name('select-service-appointment');
@@ -122,6 +128,10 @@ Route::get('/customer/getappointments', 'CustomerController@getappointments')->n
 Route::get('/customer/viewappointmentdetails/{appointment}', 'CustomerController@viewappointmentdetails')->name('customer.viewappointmentdetails');
 Route::get('/customer/addappointment', 'CustomerController@addappointment')->name('customer.addappointment');
 Route::post('/customer/storeappointment', 'CustomerController@storeappointment')->name('customer.storeappointment');
+
+//customertransaction
+Route::get('/customer/mytransactions', 'CustomerController@mytransactions')->name('customer.mytransactions');
+Route::get('/customer/gettransactionhistory', 'CustomerController@gettransactionhistory')->name('customer.gettransactionhistory');
 
 //filter
 Route::get('addappointment/select-service/{data}', 'CustomerController@selectService')->name('addappointment.selectservice');

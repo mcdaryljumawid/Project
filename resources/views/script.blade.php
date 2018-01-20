@@ -14,6 +14,7 @@
 <script type="text/javascript" src="/js/vfs_fonts.js"></script>
 <script type="text/javascript" src="/js/buttons.print.min.js"></script>
 <script type="text/javascript" src="/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="/js/numcount.js"></script>
 <!--<script src="{{ asset('js/app.js') }}"></script>-->
 <script type="text/javascript">
 	function associate_errors(errors, $form)

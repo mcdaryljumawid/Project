@@ -15,6 +15,8 @@ use Validator;
 use Session;
 use Eloquent;
 use Auth;
+use DateTime;
+use DateInterval;
 
 class AppointmentsController extends Controller
 {
@@ -157,7 +159,7 @@ class AppointmentsController extends Controller
      */
     public function create()
     {
-        $customers = Customer::all();
+        $customers = Customer::where('id', '!=', 1)->get();
         $services = Service::all();
         $workers = Worker::all();
 
@@ -172,10 +174,13 @@ class AppointmentsController extends Controller
      */
     public function store(Request $request)
     {
-        //$yesterday = Carbon::now()->subDays(1)->toDateString();
-        $yesterday = date('Y-m-d h:i:s', strtotime('-24 hours', strtotime('now')));
+        $today = Carbon::today();
+        $now = date('Y-m-d H:i:s');
+        $present = date('Y-m-d H:i:s', strtotime('+3 hours'));
+        $daybefore = date('Y-m-d H:i:s', strtotime('+24 hours'));
+
         $data = request()->validate([
-        'appointDateTime'       => 'required', //|after:'.$yesterday.'',
+        'appointDateTime'       => 'required|after:'. $today .'',
         'appointRemarks'        => 'nullable',
         'service_id'            => 'required',
         'worker_id'             => 'required',
@@ -183,19 +188,69 @@ class AppointmentsController extends Controller
         'agree'                 => 'required',
         ]);
 
-       // $dy = date('Y', strtotime($request->appointDateTime));
-        // $dm = date('m', strtotime($request->appointDateTime));
-        //$dd = date('d', strtotime($request->appointDateTime));
-        //$dh = date('h', strtotime($request->appointDateTime));
-        //$dm = date('i', strtotime($request->appointDateTime));
-        //$ds = date('s', strtotime($request->appointDateTime));
-        //$dt = Carbon::create($dy,$dm,$dd,$dh,$dm);
+
+    $service = \App\Service::findorFail($request->service_id);
+
+    $requesttime = date("H", strtotime($request->appointDateTime));
+
+    $format = date("A", strtotime($request->appointDateTime));
+    $requestformatted = date('Y-m-d H:i:s', strtotime($request->appointDateTime));
 
 
+    $finaltime = date('Y-m-d H:i:s', strtotime('+'.$service->serviceduration.' minutes', strtotime($request->appointDateTime)));
+    $requestend = date("H", strtotime($finaltime));
+
+    $formatted = date('Y-m-d H:i:s', strtotime($request->appointDateTime));
+
+  if($service->servicename == "Hair Rebond")
+  {
+    if($daybefore > $formatted)
+    {
+      return response()->json(['success' => false, 'msg' => 'Rebond appointment should be booked one day before!']);
+    }
+  }
+  else
+  {
+    if($present > $formatted)
+    {
+        return response()->json(['success' => false, 'msg' => 'Appointment should be booked three hours before!']);
+    }
+  }
+
+    if($formatted < $now)
+    {
+        return response()->json(['success' => false, 'msg' => 'Date and time chosen already passed!']);
+    }
+
+    if($requesttime <  8)
+    {
+        return response()->json(['success' => false, 'msg' => 'Appointment time cannot be before opening hours!']);
+    }
+
+    if($requesttime >= 19 || $requestend >=19)
+    {
+        return response()->json(['success' => false, 'msg' => 'Appointment time cannot exceed closing hours!']);
+    }
+
+    $appointments = \App\Appointment::
+                where('appointStatus', "Pending")
+                ->where('worker_id', $request->worker_id)
+                ->whereDate('appointDateTime', '=', date('Y-m-d', strtotime($request->appointDateTime)))
+                ->get();          
+
+    foreach($appointments as $appointment)
+    {
+        $final = date('Y-m-d H:i:s', strtotime('+'.$appointment->service->serviceduration.' minutes', strtotime($appointment->appointDateTime)));
+
+        if($formatted >= $appointment->appointDateTime && $formatted <= $final)
+        {
+             return response()->json(['success' => false, 'msg' => 'Booked appointment conflicts with appointment of same worker!']);
+        }
+    }
 
             $apt = new \App\Appointment;
             $apt->appointDateTime    =  $request->appointDateTime;
-            $apt->datetimeResched    =  date('Y-m-d h:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
+            $apt->datetimeResched    =  date('Y-m-d H:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
             $apt->appointStatus      =  "Pending";
             $apt->appointRemarks     =  "";           
             //$apt->appointRemarks     =  $request->appointRemarks;
@@ -221,7 +276,18 @@ class AppointmentsController extends Controller
 
     public function reschedule(Request $request, $id)
     {
-        $minus = date('Y-m-d h:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
+        $today = Carbon::today();
+        $now = date('Y-m-d H:i:s');
+        $present = date('Y-m-d H:i:s', strtotime('+3 hours'));
+        $daybefore = date('Y-m-d H:i:s', strtotime('+24 hours'));
+
+         $data = request()->validate([
+        'appointDateTime'       => 'required|after:'. $today .'',
+        ]);
+
+
+
+        $minus = date('Y-m-d H:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
          if(Appointment::find($id)->update([
             'appointDateTime' => $request->appointDateTime,
             'datetimeResched' => $minus,
@@ -334,7 +400,7 @@ class AppointmentsController extends Controller
             {
                 $workers = Worker::where('workertype', "Barber")->get();
             }
-            else if($service->servicename === "Rebond")
+            else if($service->servicename === "Hair Rebond")
             {
                 $workers = Worker::where('workertype', "All-around (Rebond specialized)")->get();
             }

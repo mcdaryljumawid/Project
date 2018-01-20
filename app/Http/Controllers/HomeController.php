@@ -24,6 +24,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $workers = \App\Worker::all();
+        $workercount = $workers->count();
+
+        $customers = \App\Customer::all();
+        $customercount = $customers->count();
+
+        $appointments = \App\Appointment::where('appointStatus', "Pending");
+        $appointmentcount = $appointments->count();
+
+        $transactions = \App\Transaction::where('transactStatus', "Pending");
+        $transactioncount = $transactions->count();
+
+
+        return view('home', compact(['workercount', 'customercount', 'appointmentcount', 'transactioncount']));
     }
 }

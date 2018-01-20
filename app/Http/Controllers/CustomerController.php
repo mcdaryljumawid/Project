@@ -277,4 +277,47 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'msg' => 'An error occured while cancelling service!']);
         }
     }
+
+    public function mytransactions()
+    {
+        return view('customer.mytransactions');
+    }
+
+    public function gettransactionhistory()
+    {
+
+        if(Auth::guard('customer')->check())
+        {
+            $id = Auth::user()->id;    
+        }
+
+        $transactions = \App\Transaction::where('transactStatus', "Closed")
+        ->where('customer_id', $id)
+        ->select('id')
+        ->get();
+
+        $transactiondetails = \App\TransactionDetail::wherein('transaction_id', $transactions)
+        ->get();
+
+        return Datatables::of($transactiondetails)
+        ->addColumn('id', function($transactiondetail){
+            return $transactiondetail->transaction_id;
+        })
+        ->addColumn('datetime', function($transactiondetail){
+            return date('M d, Y h:i A', strtotime($transactiondetail->transaction->created_at));
+        })
+        ->addColumn('handlinguser', function($transactiondetail){
+            return $transactiondetail->transaction->user->lastname.", ".$transactiondetail->transaction->user->firstname;
+        })
+        ->addColumn('workername', function($transactiondetail){
+            return $transactiondetail->worker->workerlname.", ".$transactiondetail->worker->workerfname;
+        })
+        ->addColumn('service', function($transactiondetail){
+            return $transactiondetail->service->servicename;
+        })
+         ->addColumn('bill', function($transactiondetail){
+            return $transactiondetail->transaction->transactBill;
+        })
+        ->make(true);
+    }
 }

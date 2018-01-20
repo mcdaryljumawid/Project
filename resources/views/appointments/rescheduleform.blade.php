@@ -15,7 +15,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-4">Date and Time </label>
 							<div class="col-sm-7">
-					    		<input id="appointDateTime" type="datetime-local" class="form-control" name="appointDateTime" required autofocus value="{{ date('Y-m-d', strtotime($appointment->appointDateTime)).'T'.date('h:m:s', strtotime($appointment->appointDateTime)) }}">
+					    		<input id="appointDateTime" type="datetime-local" class="form-control" name="appointDateTime" required autofocus value="{{ date('Y-m-d', strtotime($appointment->appointDateTime)).'T'.date('H:m:s', strtotime($appointment->appointDateTime)) }}">
 					  		</div>
 						</div>
 

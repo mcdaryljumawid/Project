@@ -75,29 +75,6 @@ class CustomersController extends Controller
         'status' => 'required'
         ]);
 
-        /*if($validator->fails())
-        {
-            return back()
-            ->withErrors($validator)
-            ->withInput();
-        }
-        else
-        {
-            Customer::create([
-            'custfname' => ucfirst($request->custfname),
-            'custlname' => ucfirst($request->custlname),
-            'custmname' => ucfirst($request->custmname),
-            'custgender' => $request->custgender,
-            'custContactNo' => $request->custContactNo,
-            'email' => $request->email,
-            'custUsername' => $request->custUsername,
-            'password' => bcrypt($request->password)
-            ]);
-
-        Session::flash("Successfully added customer!");
-        return redirect('/customers');
-        }
-    }*/
         if($data['password']){
             $data['password'] = bcrypt($data['password']);          
         }

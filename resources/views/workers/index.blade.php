@@ -13,7 +13,9 @@
 </div>
 
 <div>
-<button class="add-data-btn btn btn-success">Add Worker</button>
+  <div align="center">
+    <button class="add-data-btn btn btn-success">Add Worker</button>
+  </div>
 <table id="workers-table" class="table" style="font-size: 15px;">
 	<thead style="font-weight: bold;">
 		<tr>
@@ -50,10 +52,14 @@
 	$(function() {
         $('#workers-table').DataTable({
             bProcessing: true,
-            bServerSide: false,
+            bServerSide: true,
             sServerMethod: "GET",
             dom: 'Bfrtip',
                 buttons: [
+                {
+                  extend: 'pageLength',
+                  title: 'Moley Boley | Workers'
+                },
                 {
                   extend: 'copy',
                   exportOptions:{

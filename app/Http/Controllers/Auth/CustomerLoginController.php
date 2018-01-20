@@ -30,7 +30,7 @@ class CustomerLoginController extends Controller
     		return redirect()->intended(route('customer.dashboard'));
     	} 
     	//If unsuccessful, http_redirect()
-    	return redirect()->back()->withInput($request->only('custUsername', 'remember'))->with('message', 'Login failed!');;
+    	return redirect()->back()->withInput($request->only('custUsername', 'remember'))->with('message', 'Login failed!');
     }
 
     public function logout()

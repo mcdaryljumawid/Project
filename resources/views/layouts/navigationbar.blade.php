@@ -25,7 +25,7 @@
                     @if (Auth::guard('customer')->check())
                         <li class="{{ Request::is('customer') ? 'active': '' }}"><a href="{{ url('/customer') }}">Dashboard</a>
                         <li class="{{ Request::is('customer/myappointments') ? 'active': '' }}""><a href="{{ url('/customer/myappointments') }}">My Appointments</a>
-                        <li><a href="transaction_and_bill.php">My Transactions</a>
+                        <li class="{{ Request::is('customer/mytransactions') ? 'active': '' }}"><a href="{{ url('/customer/mytransactions') }}">My Transactions</a>
                     @elseif (Auth::guard('worker')->check())
                         <li class="{{ Request::is('worker') ? 'active': '' }}"><a href="{{ url('/worker') }}">Dashboard</a>
                         <li class="{{ Request::is('worker/myappointments') ? 'active': '' }}"><a href="{{ url('/worker/myappointments') }}">My Appointments</a>
