@@ -24,8 +24,16 @@ class WorkerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('worker');
+    {if(Auth::guard('worker')->check())
+        {
+            $pendingcount     = \App\Appointment::
+                                where('worker_id', Auth::user()->id)
+                                ->where('appointStatus', "Pending")
+                                ->count();
+            $appointmentcount = \App\Appointment::where('worker_id', Auth::user()->id)->count();
+            $transactioncount = \App\Appointment::where('worker_id', Auth::user()->id)->count();
+        }
+        return view('worker', compact(['pendingcount', 'appointmentcount', 'transactioncount']));
     }
 
     public function showChangePasswordForm(){

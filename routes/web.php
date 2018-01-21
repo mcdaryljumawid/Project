@@ -144,6 +144,8 @@ Route::patch('customer/{appointment}', 'CustomerController@reschedule')->name('c
 Route::get('customer/{appointment}/cancelform', 'CustomerController@cancelform')->name('customer.cancelform');
 Route::patch('customer/{appointment}/cancel', 'CustomerController@cancel')->name('customer.cancel');
 
+//grossincome
+Route::get('/grossincome', 'GrossIncomeController@index')->name('grossincome.index');
 
 //Route::post('worker/bookappointment', 'WorkerController@bookappointment')->name('worker.bookappointment');
 

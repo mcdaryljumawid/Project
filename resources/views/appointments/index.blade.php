@@ -12,9 +12,24 @@
     @include('success')
 </div>
 
-<div>
-  <div align="center">
+<div align="center">
 <button class="add-data-btn btn btn-success">Add Appointment</button><br><br>
+</div>
+
+
+<div class="row">
+<div class ="col-md-2">
+        <div class = "form-group" align="right">
+          <select name="choice" id="choice" class="form-control">
+              <option value="1">Pending</option>
+              <option value="2">History</option>
+         </select>
+   </div>
+</div>
+</div>
+
+<div id = "pending">
+  <div align="center">
   <h4><strong> Pending appointments </strong></h4>
   </div>
 <table id="appointments-table" class="table" style="font-size: 15px;">
@@ -30,8 +45,9 @@
 		</tr>
 	</thead>
 </table>
+</div>
 
-<br><br>
+<div id="history" style="display:none;">
 <div align="center">
   <h4><strong> Appointment history </strong></h4>
   </div>
@@ -48,6 +64,7 @@
     </tr>
   </thead>
 </table>
+</div>
 
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="viewmodal"></div>
   <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" id="addmodal"></div>
@@ -200,6 +217,16 @@
         }); */
 
     });
+});
+
+$("#choice").change(function(){
+    if($(this).val() == 1){
+      $("#pending").show();
+      $("#history").hide();
+    }else{
+      $("#pending").hide();
+      $("#history").show();
+    }
 });
 </script>
 </div>

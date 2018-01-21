@@ -7,6 +7,7 @@
 <!--<div class="container" style="padding-left: 100px;">-->
 <div class="container" >
     <div class="row">
+
     <div class="col-md-3">
         <div class="tile-stats tile-black">
             <div class="icon"><i class="fa fa-group"></i></div>
@@ -15,6 +16,7 @@
             <p>Total Workers</p>
         </div>
     </div>
+    
     <div class="col-md-3">
         <div class="tile-stats tile-green">
             <div class="icon"><i class="fa fa-user-o" aria-hidden="true"></i></div>
@@ -23,6 +25,7 @@
             <p>Total Customers</p>
         </div>    
     </div>
+
     <div class="col-md-3">
         <div class="tile-stats tile-blue">
             <div class="icon"><i class="fa fa-clock-o" aria-hidden="true"></i></div>
@@ -31,6 +34,7 @@
             <p>Total Pending Appointments</p>
         </div>        
     </div>
+    
     <div class="col-md-3">
         <div class="tile-stats tile-orange">
             <div class="icon"><i class="fa fa-money"></i></div>

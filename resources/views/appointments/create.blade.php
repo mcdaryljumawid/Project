@@ -10,11 +10,6 @@
         		<form class="form-horizontal" method="POST" action="/appointments" id="add-appointments-form">
 					{{ csrf_field() }}
         			<div class="modal-body">
-                @if(Session::get('message') !== null)
-                <div class="alert alert-block alert-danger" align="center">
-                {{ Session::get('message') !== null ? Session::get('message') : '' }}
-                </div>
-                @endif
 						<div class="form-group">
 							<label class="control-label col-sm-4">Date and Time</label>
 							<div class="col-sm-7">
@@ -72,12 +67,16 @@
         				<label class="col-xs-3 control-label">Terms and Conditions</label>
         	<div class="col-xs-9">
             <div style="border: 1px solid #e5e5e5; height: 200px; overflow: auto; padding: 10px;">
-                <p>Lorem ipsum dolor sit amet, veniam numquam has te. No suas nonumes recusabo mea, est ut graeci definitiones. His ne melius vituperata scriptorem, cum paulo copiosae conclusionemque at. Facer inermis ius in, ad brute nominati referrentur vis. Dicat erant sit ex. Phaedrum imperdiet scribentur vix no, ad latine similique forensibus vel.</p>
-                <p>Dolore populo vivendum vis eu, mei quaestio liberavisse ex. Electram necessitatibus ut vel, quo at probatus oportere, molestie conclusionemque pri cu. Brute augue tincidunt vim id, ne munere fierent rationibus mei. Ut pro volutpat praesent qualisque, an iisque scripta intellegebat eam.</p>
-                <p>Mea ea nonumy labores lobortis, duo quaestio antiopam inimicus et. Ea natum solet iisque quo, prodesset mnesarchum ne vim. Sonet detraxit temporibus no has. Omnium blandit in vim, mea at omnium oblique.</p>
-                <p>Eum ea quidam oportere imperdiet, facer oportere vituperatoribus eu vix, mea ei iisque legendos hendrerit. Blandit comprehensam eu his, ad eros veniam ridens eum. Id odio lobortis elaboraret pro. Vix te fabulas partiendo.</p>
-                <p>Natum oportere et qui, vis graeco tincidunt instructior an, autem elitr noster per et. Mea eu mundi qualisque. Quo nemore nusquam vituperata et, mea ut abhorreant deseruisse, cu nostrud postulant dissentias qui. Postea tincidunt vel eu.</p>
-                <p>Ad eos alia inermis nominavi, eum nibh docendi definitionem no. Ius eu stet mucius nonumes, no mea facilis philosophia necessitatibus. Te eam vidit iisque legendos, vero meliore deserunt ius ea. An qui inimicus inciderint.</p>
+                <p>These terms and conditions are provided to propose rules and policies in relation with the Online Appointment of Services offered by Moley Boley Galleria Luisa.</p>
+                <p>Appointments are to be booked 3 hours before the desired time of appointment. For Rebond, which usually takes for 6 hours, it must be booked 24 hours or 1 day before the desired appointment time.</p>
+                <p>Timeslot chosen by the user may be in conflict under the following possibilities: (1) Worker chosen has an existing appointment on which the forcasted time range is in conflict with the time chosen by the client. (2) Chosen timeslot might be out of the operation hours. (3) Date is beyond the present date.</p>
+                <p>Moley Boley Operation Hours:
+                  Monday to Saturday:   9am to 9pm
+                  Sunday:               10am to 9pm
+                </p>
+                <p>Reschedule and cancellation of appointment must be done 3 hours before the appointment. The same possibilities of conflict are provided for reschedule and cancellation.</p>
+                <p>Upon arriving at Moley Boley, the client must present a valid ID certifying that he/she is the one with current pending appointment for that time.</p>
+                <p>Appointments can be cancelled by the cashier or manager if customer doesn't show up in time chosen by the user.</p>
             </div><span class="help-text text-danger"></span>
         </div>
     </div>
@@ -121,14 +120,16 @@
 		                  title: result.msg,
 		                  icon: "success"
 		                });
-		            }else{
-		              swal({
-		                  title: result.msg,
-		                  icon: "error"
-		                });
+                $("#appointments-table").DataTable().ajax.url( '/appointments/get_datatable' ).load();
+                $('.modal').modal('hide');
 		            }
-		            $("#appointments-table").DataTable().ajax.url( '/appointments/get_datatable' ).load();
-	            $('.modal').modal('hide');
+                else
+                {
+                   swal({
+                      title: result.msg,
+                      icon: "error"
+                    });
+                }
 	          },
 	          error: function(xhr,status,error){
 	            var response_object = JSON.parse(xhr.responseText); 

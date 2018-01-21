@@ -116,14 +116,14 @@
 	                  title: result.msg,
 	                  icon: "success"
 	                });
+	            $("#customers-table").DataTable().ajax.url( '/customers/get_datatable' ).load();
+	            $('.modal').modal('hide');
 	            }else{
 	              swal({
 	                  title: result.msg,
 	                  icon: "error"
 	                });
 	            }
-	            $("#customers-table").DataTable().ajax.url( '/customers/get_datatable' ).load();
-	            $('.modal').modal('hide');
 	          },
 	          error: function(xhr,status,error){
 	            var response_object = JSON.parse(xhr.responseText); 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\Datatables;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Requests\CreateAppointment;
+use App\Http\Requests\RescheduleAppointment;
 use App\Appointment;
 use App\Customer;
 use App\Worker;
@@ -16,6 +18,7 @@ use Session;
 use Eloquent;
 use Auth;
 use DateTime;
+use Redirect;
 use DateInterval;
 
 class AppointmentsController extends Controller
@@ -172,21 +175,11 @@ class AppointmentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateAppointment $request)
     {
-        $today = Carbon::today();
         $now = date('Y-m-d H:i:s');
         $present = date('Y-m-d H:i:s', strtotime('+3 hours'));
         $daybefore = date('Y-m-d H:i:s', strtotime('+24 hours'));
-
-        $data = request()->validate([
-        'appointDateTime'       => 'required|after:'. $today .'',
-        'appointRemarks'        => 'nullable',
-        'service_id'            => 'required',
-        'worker_id'             => 'required',
-        'customer_id'           => 'required',
-        'agree'                 => 'required',
-        ]);
 
 
     $service = \App\Service::findorFail($request->service_id);
@@ -201,6 +194,7 @@ class AppointmentsController extends Controller
     $requestend = date("H", strtotime($finaltime));
 
     $formatted = date('Y-m-d H:i:s', strtotime($request->appointDateTime));
+    $requestdaytoday    = date('D', strtotime($request->appointDateTime));
 
   if($service->servicename == "Hair Rebond")
   {
@@ -222,14 +216,29 @@ class AppointmentsController extends Controller
         return response()->json(['success' => false, 'msg' => 'Date and time chosen already passed!']);
     }
 
-    if($requesttime <  8)
+    if($requestdaytoday == "Sun")
     {
-        return response()->json(['success' => false, 'msg' => 'Appointment time cannot be before opening hours!']);
-    }
+        if($requesttime <  10)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot be before opening hours!']);
+        }
 
-    if($requesttime >= 19 || $requestend >=19)
+        if($requesttime >= 21 || $requestend >= 21)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot exceed closing hours!']);
+        }
+    }
+    else
     {
-        return response()->json(['success' => false, 'msg' => 'Appointment time cannot exceed closing hours!']);
+        if($requesttime <  9)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot be before opening hours!']);
+        }
+
+        if($requesttime >= 21 || $requestend >= 21)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot exceed closing hours!']);
+        }
     }
 
     $appointments = \App\Appointment::
@@ -274,20 +283,79 @@ class AppointmentsController extends Controller
     }
 
 
-    public function reschedule(Request $request, $id)
+    public function reschedule(RescheduleAppointment $request, $id)
     {
-        $today = Carbon::today();
-        $now = date('Y-m-d H:i:s');
-        $present = date('Y-m-d H:i:s', strtotime('+3 hours'));
-        $daybefore = date('Y-m-d H:i:s', strtotime('+24 hours'));
+        $now            = date('Y-m-d H:i:s');
+        $daytoday       = date('D');
+        $present        = date('Y-m-d H:i:s', strtotime('+3 hours'));
+        $daybefore      = date('Y-m-d H:i:s', strtotime('+24 hours'));
+        $app            = Appointment::find($id);
 
-         $data = request()->validate([
-        'appointDateTime'       => 'required|after:'. $today .'',
-        ]);
+    $service            = \App\Service::findorFail($app->service_id);
+    $requesttime        = date("H", strtotime($request->appointDateTime));
+    $format             = date("A", strtotime($request->appointDateTime));
+    $requestformatted   = date('Y-m-d H:i:s', strtotime($request->appointDateTime));
+    $finaltime          = date('Y-m-d H:i:s', strtotime('+'.$service->serviceduration.' minutes', strtotime($request->appointDateTime)));
+    $requestend         = date("H", strtotime($finaltime));
+    $formatted          = date('Y-m-d H:i:s', strtotime($request->appointDateTime));
+    $minus              = date('Y-m-d H:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
+    $requestdaytoday    = date('D', strtotime($request->appointDateTime));
+
+    if($now > $app->datetimeResched)
+    {
+        return response()->json(['success' => false, 'msg' => 'Reschedule must be done before the valid reschedule date provided!']);
+    }
+
+    if($formatted < $now)
+    {
+        return response()->json(['success' => false, 'msg' => 'Date and time chosen already passed!']);
+    }
+
+    if($today == "Sun" || $requestdaytoday == "Sun")
+    {
+         if($requesttime <  10)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot be before opening hours!']);
+        }
+        
+        if($requesttime >= 21 || $requestend >= 21)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot exceed closing hours!']);
+        }
+    }
+    else
+    {
+        if($requesttime <  9)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot be before opening hours!']);
+        }
+
+        if($requesttime >= 21 || $requestend >= 21)
+        {
+            return response()->json(['success' => false, 'msg' => 'Appointment time cannot exceed closing hours!']);
+        }
+    }
+
+    $appointments = \App\Appointment::
+                where('appointStatus', "Pending")
+                ->where('worker_id', $app->worker_id)
+                ->where('id', '!=', $app->id) 
+                ->whereDate('appointDateTime', '=', date('Y-m-d', strtotime($request->appointDateTime)))
+                ->get();          
+
+   
+        foreach($appointments as $appointment)
+        {
+            $final = date('Y-m-d H:i:s', strtotime('+'.$appointment->service->serviceduration.' minutes', strtotime($appointment->appointDateTime)));
+
+            if($formatted >= $appointment->appointDateTime && $formatted <= $final)
+            {
+                return response()->json(['success' => false, 'msg' => '' .$appointments->count(). 'Booked appointment conflicts with appointment of same worker!']);
+            }
+        }
+    
 
 
-
-        $minus = date('Y-m-d H:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
          if(Appointment::find($id)->update([
             'appointDateTime' => $request->appointDateTime,
             'datetimeResched' => $minus,

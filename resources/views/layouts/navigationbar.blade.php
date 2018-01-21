@@ -38,7 +38,7 @@
                         <li class="{{ Request::is('services') ? 'active': '' }}"><a href="{{ url('/services') }}">Services</a>
                         <li class="{{ Request::is('appointments') ? 'active': '' }}"><a href="{{ url('/appointments') }}">Appointment</a>
                         <li class="{{ Request::is('transactions') ? 'active': '' }}"><a href="{{ url('/transactions') }}">Transaction and Bill</a>
-                        <li><a href="gross_income.php">Gross Income</a>
+                        <li class="{{ Request::is('grossincome') ? 'active': '' }}""><a href="{{ url('/grossincome') }}">Gross Income</a>
                         <li><a href="generatereport.php">Generate Reports</a>
                     @else
                         <li><a href="{{ url('/customers') }}">Customers</a>

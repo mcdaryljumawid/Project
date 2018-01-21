@@ -12,12 +12,26 @@
     @include('success')
 </div>
 
-<div>
-  <div align="center">
+<div align="center">
 <button class="add-walkin-btn btn btn-success">Walk-in Transaction</button>&nbsp;
-<button class="add-registered-btn btn btn-success">Registered Customer Transaction</button><br><br>
+<button class="add-registered-btn btn btn-success">Registered Customer Transaction</button>
+</div>
+
+<div class="row">
+<div class ="col-md-2">
+        <div class = "form-group" align="right">
+          <select name="choice" id="choice" class="form-control">
+              <option value="1">Pending</option>
+              <option value="2">History</option>
+         </select>
+   </div>
+</div>
+</div>
+
+<div id="pending">
+<div align="center">
   <h4><strong> Pending transactions </strong></h4>
-  </div>
+</div>
 <table id="transactions-table" class="table" style="font-size: 15px;">
 	<thead style="font-weight: bold;">
 		<tr>
@@ -29,7 +43,9 @@
 		</tr>
 	</thead>
 </table>
-<br>
+</div>
+
+<div id="history" style="display:none;">
 <div align="center">
   <h4><strong> Closed transactions </strong></h4>
 </div>
@@ -45,6 +61,7 @@
     </tr>
   </thead>
 </table>
+</div>
 
 <br><br>
 
@@ -165,6 +182,16 @@
         });
 
     });
+});
+
+ $("#choice").change(function(){
+    if($(this).val() == 1){
+      $("#pending").show();
+      $("#history").hide();
+    }else{
+      $("#pending").hide();
+      $("#history").show();
+    }
 });
 </script>
 </div>
