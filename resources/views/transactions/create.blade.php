@@ -39,6 +39,7 @@
                             <label class ="control-label col-sm-4">Worker</label>
                             <div class="col-sm-7">
                             	<select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
+                            		<option disabled selected><i>Choose a worker</i></option>
                                 </select>
 								<span class="help-text text-danger"></span>
                             </div>
@@ -85,14 +86,14 @@
 		                  title: result.msg,
 		                  icon: "success"
 		                });
+		               $("#transactions-table").DataTable().ajax.url( '/transactions/get_datatable' ).load();
+	            	   $('.modal').modal('hide');
 		            }else{
 		              swal({
 		                  title: result.msg,
 		                  icon: "error"
 		                });
 		            }
-		            $("#transactions-table").DataTable().ajax.url( '/transactions/get_datatable' ).load();
-	            $('.modal').modal('hide');
 	          },
 	          error: function(xhr,status,error){
 	            var response_object = JSON.parse(xhr.responseText); 

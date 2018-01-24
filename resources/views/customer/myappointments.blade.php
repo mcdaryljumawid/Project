@@ -18,10 +18,11 @@
 
 <div class="row">
 <div class ="col-md-2">
-        <div class = "form-group" align="right">
+        <div class = "form-group" align="right" style="width: 200px;">
           <select name="choice" id="choice" class="form-control">
               <option value="1">Pending</option>
               <option value="2">History</option>
+              <option value="3">Current Appointments</option>
          </select>
    </div>
 </div>
@@ -29,9 +30,28 @@
 
 <div id="pending">
 <div align="center">
-  <h4><strong> Pending appointments </strong></h4>
+  <h4><strong> My pending appointments </strong></h4>
 </div>
 <table id="appointments-table" class="table" style="font-size: 15px;">
+  <thead style="font-weight: bold;">
+    <tr>
+      <td>ID</td>
+      <td>Date</td>
+      <td>Estimated time start</td>
+      <td>Estimated time end</td>
+      <td>Worker</td>
+      <td>Service</td>
+      <td>Actions</td>
+    </tr>
+  </thead>
+</table>
+</div>
+
+<div id="history" style="display:none;">
+<div align="center">
+  <h4><strong> My appointment history </strong></h4>
+  </div>
+<table id="master-appointments-table" class="table" style="font-size: 15px;">
   <thead style="font-weight: bold;">
     <tr>
       <td>ID</td>
@@ -44,18 +64,18 @@
 </table>
 </div>
 
-<div id="history" style="display:none;">
+<div id="allappointments" style="display:none;">
 <div align="center">
-  <h4><strong> Closed and Cancelled appointments </strong></h4>
-  </div>
-<table id="master-appointments-table" class="table" style="font-size: 15px;">
+  <h4><strong> Current pending appointments </strong></h4>
+</div>
+<table id="allappointments-table" class="table" style="font-size: 15px;">
   <thead style="font-weight: bold;">
     <tr>
-      <td>ID</td>
-      <td>Date and Time</td>
-      <td>Customer</td>
+      <td>Date</td>
+      <td>Estimated time start</td>
+      <td>Estimated time end</td>
+      <td>Worker</td>
       <td>Service</td>
-      <td>Actions</td>
     </tr>
   </thead>
 </table>
@@ -74,10 +94,13 @@
             bServerSide: false,
             sServerMethod: "GET",
             ajax: '/customer/getpendingappointments',
+            "order": [[ 1, "asc" ], [ 2, "asc" ]],
             columns: [
-                {data: 'id', name: 'id', className: 'col-md-1 text-left'},
-                {data: 'datetime', name: 'datetime', className: 'col-md-1 text-left'},
-                {data: 'workername', name: 'workername', className: 'col-md-1 text-left'},
+                {data: 'id', name: 'id', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'date', name: 'date', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'time', name: 'time', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'timeend', name: 'timeend', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'workername', name: 'workername', className: 'col-md-1 text-left', orderable: false,},
                 {data: 'service', name: 'service', className: 'col-md-1 text-left', orderable: false,},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false,},
             ], 
@@ -96,6 +119,23 @@
                 {data: 'workername', name: 'workername', className: 'col-md-1 text-left'},
                 {data: 'service', name: 'service', className: 'col-md-1 text-left', orderable: false,},
                 {data: 'action', name: 'action', className: 'col-md-1 text-left', orderable: false,},
+            ], 
+          });
+      });
+
+  $(function() {
+        $('#allappointments-table').DataTable({
+            bProcessing: true,
+            bServerSide: false,
+            sServerMethod: "GET",
+            ajax: '/customer/getcurrentappointments',
+            "order": [[ 0, "asc" ], [ 1, "asc" ]],
+            columns: [
+                {data: 'date', name: 'date', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'time', name: 'time', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'timeend', name: 'timeend', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'workername', name: 'workername', className: 'col-md-1 text-left', orderable: false,},
+                {data: 'service', name: 'service', className: 'col-md-1 text-left', orderable: false,},
             ], 
           });
       });
@@ -156,9 +196,15 @@ $("#choice").change(function(){
     if($(this).val() == 1){
       $("#pending").show();
       $("#history").hide();
-    }else{
+      $("#allappointments").hide();
+    }else if($(this).val() == 2){
       $("#pending").hide();
       $("#history").show();
+      $("#allappointments").hide();
+    }else{
+      $("#pending").hide();
+      $("#history").hide();
+      $("#allappointments").show();
     }
 });
   </script>

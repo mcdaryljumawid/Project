@@ -14,7 +14,7 @@ class AppointmentTransaction extends Model
     
     public function transaction()
 	{
-    	return $this->belongsTo('App\Transaction');
+    	return $this->hasOne('App\Transaction');
 	}
 
 	public function appointment()

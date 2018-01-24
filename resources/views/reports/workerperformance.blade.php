@@ -1,12 +1,12 @@
 @extends('layouts.master')
 <!--@include('script')-->
 @section('title')
-	Gross Income | Moley Boley Online Appointment and Operations Management System
+	Worker Performance | Moley Boley Online Appointment and Operations Management System
 @endsection
 @include('script')
 <br><br><br>
 <div class="container">
- <form class="form-horizontal" method="GET" action="/grossincome/getgrossincome" id="grossincome-form">
+ <form class="form-horizontal" method="GET" action="/reports/getworkerperformance" id="workerperformance-form">
   
   <div class="row">
       <div class = "col-md-2">
@@ -20,6 +20,18 @@
           </select>
         </div>
       </div>
+  </div>
+
+  <div class="form-group">
+      <label class ="control-label col-sm-4">Worker</label>
+          <div class="col-sm-7">
+                <select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
+                    @foreach($workers as $worker)
+                        <option value="{{ $worker->id }}">{{ $worker->workerlname }}, {{ $worker->workerfname }}</option>
+                    @endforeach
+                </select>
+        <span class="help-text text-danger"></span>
+          </div>
   </div>
 
   <div class="row">
@@ -72,19 +84,18 @@
 
 <div class="row">
 <div class = "col-md-2">
-  <button class="submit-btn btn btn-success">View gross income</button>
+  <button class="submit-btn btn btn-success">View worker performance</button>
 </div>
 </div>
 
 <div>
-<table id="grossincome-table" class="table" style="font-size: 15px; display:none;">
+<table id="workerperformance-table" class="table" style="font-size: 15px; display:none;">
   <thead style="font-weight: bold;">
     <tr>
-        <td>Worker ID</td>
-        <td>Firstname</td>
-        <td>Lastname</td>
+        <td>Service ID</td>
+        <td>Service Name</td>
         <td>Number of Transactions</td>
-        <td>Accumulated Gross Income</td>
+        <td>Worker name</td>
     </tr>
 </thead>
 </table>
@@ -121,9 +132,10 @@
   $(function(){
     $(document).off('click','.submit-btn').on('click','.submit-btn', function(e){
         e.preventDefault();
-          var $form = $('#grossincome-form');
+          var $form = $('#workerperformance-form');
           var $url = $form.attr('action');
           var choice = document.getElementById("choice").value;
+          var worker_id = document.getElementById("worker_id").value;
           var year = document.getElementById("year").value;
           var month = document.getElementById("month").value;
           var date1 = document.getElementById("date1").value;
@@ -131,10 +143,10 @@
           $.ajax({
             type: 'GET',
             url: $url,
-            data: $("#grossincome-form").serialize(), 
+            data: $("#workerperformance-form").serialize(), 
           });
           $(function() {
-          $('#grossincome-table').DataTable({
+          $('#workerperformance-table').DataTable({
               bProcessing: true,
               bServerSide: false,
               sServerMethod: "GET",
@@ -146,36 +158,35 @@
                 },
                 {
                   extend: 'copy',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Worker Performance'
                 },
                 {
                   extend: 'excel',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Worker Performance'
                 },
                 {
                   extend: 'pdf',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Worker Performance'
                 },
                 {
                   extend: 'print',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Worker Performance'
                 },
                 ],
             ajax:{ 
-              url: '/grossincome/getgrossincome?choice='+choice+'&year='+year+'&month='+month+'&date1='+date1+'&date2='+date2+'',
+              url: '/reports/getworkerperformance?choice='+choice+'&worker_id='+worker_id+'&year='+year+'&month='+month+'&date1='+date1+'&date2='+date2+'',
               },
             columns: [
                 {data: 'id', name: 'id', className: 'col-md-1 text-left', orderable: false},
-                {data: 'firstname', name: 'firstname', className: 'col-md-1 text-left', orderable: false},
-                {data: 'lastname', name: 'lastname', className: 'col-md-1 text-left', orderable: false},
+                {data: 'servicename', name: 'servicename', className: 'col-md-1 text-left', orderable: false},
                 {data: 'transactioncount', name: 'transactioncount', className: 'col-md-1 text-left', orderable: false},
-                {data: 'grossincome', name: 'grossincome', className: 'col-md-1 text-left', orderable: false},
+                {data: 'workername', name: 'workername', className: 'col-md-1 text-left', orderable: false},
             ],
           });   
         }); 
 
-      //    $("#grossincome-table").DataTable().ajax.url('/grossincome/getgrossincome').load(); 
-          $("#grossincome-table").show();
+          //$("#grossincome-table").DataTable().ajax.url('/grossincome/getgrossincome').load(); 
+          $("#workerperformance-table").show();
           
     });
    });  

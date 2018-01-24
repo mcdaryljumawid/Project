@@ -30,7 +30,7 @@
                         <li class="{{ Request::is('worker') ? 'active': '' }}"><a href="{{ url('/worker') }}">Dashboard</a>
                         <li class="{{ Request::is('worker/myappointments') ? 'active': '' }}"><a href="{{ url('/worker/myappointments') }}">My Appointments</a>
                         <li class="{{ Request::is('worker/transactions') ? 'active': '' }}""><a href="{{ url('/worker/mytransactions') }}">My Transactions</a>
-                            <li><a href="transaction_and_bill.php">Gross Income</a>
+                            <li class="{{ Request::is('worker/mygrossincome') ? 'active': '' }}"><a href="{{ url('/worker/mygrossincome') }}">Gross Income</a>
                     @elseif (Auth::user()->role == "Manager")
                         <li class="{{ Request::is('users') ? 'active': '' }}"><a href="{{ url('/users') }}">Users</a>
                         <li class="{{ Request::is('workers') ? 'active': '' }}"><a href="{{ url('/workers') }}">Workers</a>
@@ -38,12 +38,35 @@
                         <li class="{{ Request::is('services') ? 'active': '' }}"><a href="{{ url('/services') }}">Services</a>
                         <li class="{{ Request::is('appointments') ? 'active': '' }}"><a href="{{ url('/appointments') }}">Appointment</a>
                         <li class="{{ Request::is('transactions') ? 'active': '' }}"><a href="{{ url('/transactions') }}">Transaction and Bill</a>
-                        <li class="{{ Request::is('grossincome') ? 'active': '' }}""><a href="{{ url('/grossincome') }}">Gross Income</a>
-                        <li><a href="generatereport.php">Generate Reports</a>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">Gross Income
+                            <span class="caret"></span>
+                            </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ url('/grossincome') }}">Gross Income</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('grossincome/byworker') }}">Worker Breakdown</a>
+                            </li>
+                        </ul>
+                        </li>
+                        
+                         <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">Report
+                            <span class="caret"></span>
+                            </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ url('/reports') }}">Projected income & Shop performance</a>
+                                <a href="{{ url('/reports/workerperformance') }}">Worker performance</a>
+                            </li>
+                        </ul>
+                        </li>
                     @else
                         <li><a href="{{ url('/customers') }}">Customers</a>
                         <li><a href="{{ url('/appointments') }}">Appointment</a>
-                        <li><a href="t{{ url('/transactions') }}">Transaction and Bill</a>
+                        <li><a href="{{ url('/transactions') }}">Transaction and Bill</a>
                         <li><a href="generatereport.php">Generate Reports</a>
                     @endif 
                 </ul>

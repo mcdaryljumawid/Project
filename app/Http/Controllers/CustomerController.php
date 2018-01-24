@@ -91,8 +91,14 @@ class CustomerController extends Controller
        ->addColumn('id', function($appointment){
             return $appointment->id;
         })
-        ->addColumn('datetime', function($appointment){
-            return date('M d, Y h:i A', strtotime($appointment->appointDateTime));
+        ->addColumn('date', function($appointment){
+            return date('M d, Y', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('time', function($appointment){
+            return date('h:i A', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('timeend', function($appointment){
+            return date('h:i A', strtotime('+'.$appointment->service->serviceduration.' minutes', strtotime($appointment->appointDateTime)));
         })
         ->addColumn('workername', function($appointment){
             return $appointment->worker->workerlname.", ".$appointment->worker->workerfname;
@@ -147,6 +153,31 @@ class CustomerController extends Controller
                         <span class="glyphicon glyphicon-search"></span>
                     </button>
                     </div>';
+        })
+        ->make(true);
+    }
+
+    public function getcurrentappointments()
+    {
+        $appointments = \App\Appointment::where('appointStatus', "Pending");
+
+        return Datatables::of($appointments)
+        ->addColumn('date', function($appointment){
+            return date
+            ('M d, Y', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('time', function($appointment){
+            return date
+            ('h:i A', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('timeend', function($appointment){
+            return date('h:i A', strtotime('+'.$appointment->service->serviceduration.' minutes', strtotime($appointment->appointDateTime)));
+        })
+        ->addColumn('workername', function($appointment){
+            return $appointment->worker->workerlname.", ".$appointment->worker->workerfname;
+        })
+        ->addColumn('service', function($appointment){
+            return $appointment->service->servicename;
         })
         ->make(true);
     }
@@ -251,7 +282,7 @@ class CustomerController extends Controller
    
             $apt = new \App\Appointment;
             $apt->appointDateTime    =  $request->appointDateTime;
-            $apt->datetimeResched    =  date('Y-m-d h:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
+            $apt->datetimeResched    =  date('Y-m-d H:i:s', strtotime('-3 hours', strtotime($request->appointDateTime)));
             $apt->appointStatus      =  "Pending";
             $apt->appointRemarks     =  "";           
             $apt->service_id         =  $request->service_id;

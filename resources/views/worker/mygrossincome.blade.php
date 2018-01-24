@@ -1,12 +1,12 @@
 @extends('layouts.master')
 <!--@include('script')-->
 @section('title')
-	Gross Income | Moley Boley Online Appointment and Operations Management System
+	My Gross Income | Moley Boley Online Appointment and Operations Management System
 @endsection
 @include('script')
 <br><br><br>
 <div class="container">
- <form class="form-horizontal" method="GET" action="/grossincome/getgrossincome" id="grossincome-form">
+ <form class="form-horizontal" method="GET" action="/worker/getgrossincome" id="grossincome-form">
   
   <div class="row">
       <div class = "col-md-2">
@@ -84,7 +84,7 @@
         <td>Firstname</td>
         <td>Lastname</td>
         <td>Number of Transactions</td>
-        <td>Accumulated Gross Income</td>
+        <td>Accumulated Gross Income</td> 
     </tr>
 </thead>
 </table>
@@ -162,7 +162,7 @@
                 },
                 ],
             ajax:{ 
-              url: '/grossincome/getgrossincome?choice='+choice+'&year='+year+'&month='+month+'&date1='+date1+'&date2='+date2+'',
+              url: '/worker/getgrossincome?choice='+choice+'&year='+year+'&month='+month+'&date1='+date1+'&date2='+date2+'',
               },
             columns: [
                 {data: 'id', name: 'id', className: 'col-md-1 text-left', orderable: false},
@@ -173,8 +173,6 @@
             ],
           });   
         }); 
-
-      //    $("#grossincome-table").DataTable().ajax.url('/grossincome/getgrossincome').load(); 
           $("#grossincome-table").show();
           
     });

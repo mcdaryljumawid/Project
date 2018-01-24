@@ -18,7 +18,7 @@
 					  		</div>
 						</div>
 
-						<div class="form-group">
+						            <div class="form-group">
                             <label class ="control-label col-sm-4">Customer</label>
                             <div class="col-sm-7">
                             	<select class="select form-control " id="customer_id" name="customer_id" style="width: 200px">
@@ -26,7 +26,7 @@
                                 		<option value="{{ $customer->id }}">{{ $customer->custlname }}, {{ $customer->custfname }}</option>
                                 	@endforeach
                                 </select>
-								<span class="help-text text-danger"></span>
+								            <span class="help-text text-danger"></span>
                             </div>
                         </div>
 
@@ -57,7 +57,7 @@
                         <div class="form-group">
                             <label class ="control-label col-sm-4">Worker</label>
                             <div class="col-sm-7">
-                            	<select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
+                            	<select class="select form-control " id="worker_id" name="worker_id" style="width: 200px"><option disabled selected><i>Choose a worker</i></option>
                                 </select>
 								                <span class="help-text text-danger"></span>
                             </div>
@@ -66,14 +66,14 @@
                       <div class="form-group">
         				<label class="col-xs-3 control-label">Terms and Conditions</label>
         	<div class="col-xs-9">
-            <div style="border: 1px solid #e5e5e5; height: 200px; overflow: auto; padding: 10px;">
+            <div style="border: 1px solid #e5e5e5; height: 400px; overflow: auto; padding: 10px;">
                 <p>These terms and conditions are provided to propose rules and policies in relation with the Online Appointment of Services offered by Moley Boley Galleria Luisa.</p>
                 <p>Appointments are to be booked 3 hours before the desired time of appointment. For Rebond, which usually takes for 6 hours, it must be booked 24 hours or 1 day before the desired appointment time.</p>
                 <p>Timeslot chosen by the user may be in conflict under the following possibilities: (1) Worker chosen has an existing appointment on which the forcasted time range is in conflict with the time chosen by the client. (2) Chosen timeslot might be out of the operation hours. (3) Date is beyond the present date.</p>
-                <p>Moley Boley Operation Hours:
-                  Monday to Saturday:   9am to 9pm
-                  Sunday:               10am to 9pm
-                </p>
+                <p><strong>Moley Boley Operation Hours:<br>
+                 <span> Monday to Saturday: 9am to 9pm </span><br>
+                 <span> Sunday: 10am to 9pm </span>
+                </strong></p>
                 <p>Reschedule and cancellation of appointment must be done 3 hours before the appointment. The same possibilities of conflict are provided for reschedule and cancellation.</p>
                 <p>Upon arriving at Moley Boley, the client must present a valid ID certifying that he/she is the one with current pending appointment for that time.</p>
                 <p>Appointments can be cancelled by the cashier or manager if customer doesn't show up in time chosen by the user.</p>

@@ -18,7 +18,7 @@
                     	<div class="form-group">
                             <label class ="control-label col-sm-4">Service Category</label>
                             <div class="col-sm-7">
-                            	<select class="select form-control " id="select_servicecategory" name="servicecategory" style="width: 200px">
+                            	<select class="select form-control " id="select_servicecategory_walkin" name="servicecategory" style="width: 200px">
                                 	<option value="Hair">Hair</option>
                                     <option value="Threading">Threading</option>
                                     <option value="Nails">Nails</option>
@@ -33,7 +33,7 @@
 						<div class="form-group">
                             <label class ="control-label col-sm-4">Service</label>
                             <div class="col-sm-7">
-                            	<select class="select form-control " id="service_id" name="service_id" style="width: 200px">
+                            	<select class="select form-control " id="service_id_walkin" name="service_id" style="width: 200px">
                                 </select>
 								<span class="help-text text-danger"></span>
                             </div>
@@ -42,7 +42,8 @@
                         <div class="form-group">
                             <label class ="control-label col-sm-4">Worker</label>
                             <div class="col-sm-7">
-                            	<select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
+                            	<select class="select form-control " id="worker_id_walkin" name="worker_id" style="width: 200px">
+                            		<option disabled selected><i>Choose a worker</i></option>
                                 </select>
 								<span class="help-text text-danger"></span>
                             </div>
@@ -77,14 +78,14 @@
 		                  title: result.msg,
 		                  icon: "success"
 		                });
+		              $("#transactions-table").DataTable().ajax.url( '/transactions/get_datatable' ).load();
+	            	  $('.modal').modal('hide');
 		            }else{
 		              swal({
 		                  title: result.msg,
 		                  icon: "error"
 		                });
 		            }
-		            $("#transactions-table").dataTable().ajax.url( '/transactions/get_datatable' ).load();
-	            $('.modal').modal('hide');
 	          },
 	          error: function(xhr,status,error){
 	            var response_object = JSON.parse(xhr.responseText); 
@@ -94,7 +95,7 @@
 		});
 	 });
 
-	$('#select_servicecategory').change(function(){
+	$('#select_servicecategory_walkin').change(function(){
       var servicecategory = $(this).val();
       var that = this;
       var token = $("input[name='_token']").val();
@@ -107,11 +108,10 @@
 	          }
 	      });
 	  });
-	 $('#select_servicecategory').change();
+	 $('#select_servicecategory_walkin').change();
 	
 
-	function getWorkers(){
-		$('#service_id').change(function(){
+		$('#service_id_walkin').change(function(){
 	      var service_id = $(this).val();
 	      var that = this;
 	      var token = $("input[name='_token']").val();
@@ -123,8 +123,6 @@
 		            $("select[name='worker_id'").html(data);
 		          }
 		      });
-		      
 		  });
-	}
-	getWorkers();
+		$('#service_id_walkin').change();
 </script>

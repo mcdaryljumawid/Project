@@ -38,12 +38,13 @@ class UsersController extends Controller
         ->addColumn('action', function ($user){
 
                 return '
+                            <div class="btn-group" style="display: flex;">
                             <button title="Edit User" class="btn btn-warning edit-data-btn" data-id="'.$user->id.'">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
                             <button title="Delete User" class="btn btn-danger delete-data-btn" data-id="'.$user->id.'">
                                 <span class="glyphicon glyphicon-trash"></span>
-                            </button>';
+                            </button></div>';
         })
         ->make(true);
     }

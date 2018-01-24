@@ -56,9 +56,13 @@ Route::get('/customers/get_datatable', 'CustomersController@get_datatable')->nam
 Route::get('/services/get_datatable', 'ServicesController@get_datatable')->name('services.get_datatable');
 Route::get('/appointments/get_datatable', 'AppointmentsController@get_datatable')->name('appointments.get_datatable');
 Route::get('/appointments/get_datatable_appointhistory', 'AppointmentsController@get_datatable_appointhistory')->name('appointments.get_datatable_appointhistory');
+Route::get('/appointments/get_datatable_appointtransaction', 'AppointmentsController@get_datatable_appointtransaction')->name('appointments.get_datatable_appointtransaction');
 Route::get('/transactions/get_datatable', 'TransactionsController@get_datatable')->name('transactions.get_datatable');
 Route::get('/transactions/get_datatable_closedtransactions', 'TransactionsController@get_datatable_closedtransactions')->name('transactions.get_datatable_closedtransactions');
-
+Route::get('/grossincome/getgrossincome', 'GrossIncomeController@getgrossincome')->name('grossincome.getgrossincome');
+Route::get('/grossincome/getbyworker', 'GrossIncomeController@getbyworker')->name('grossincome.getbyworker');
+Route::get('/reports/getprojectedincome', 'ReportsController@getprojectedincome')->name('reports.getprojectedincome');
+Route::get('/reports/getworkerperformance', 'ReportsController@getworkerperformance')->name('reports.getworkerperformance');
 //crudroutes
 Route::resource('users', 'UsersController'); //user routes
 Route::resource('workers', 'WorkersController'); //worker routes
@@ -120,11 +124,16 @@ Route::get('/worker/viewappointmentdetails/{appointment}', 'WorkerController@vie
 Route::get('/worker/mytransactions', 'WorkerController@mytransactions')->name('worker.mytransactions');
 Route::get('/worker/gettransactionhistory', 'WorkerController@gettransactionhistory')->name('worker.gettransactionhistory');
 
+//worker gross income
+Route::get('/worker/mygrossincome', 'WorkerController@mygrossincome')->name('worker.mygrossincome');
+Route::get('/worker/getgrossincome', 'WorkerController@getgrossincome')->name('worker.getgrossincome');
+
 //CUSTOMER
 //customerappointments
 Route::get('/customer/myappointments', 'CustomerController@myappointments')->name('customer.myappointments');
 Route::get('/customer/getpendingappointments', 'CustomerController@getpendingappointments')->name('customer.getpendingappointments');
 Route::get('/customer/getappointments', 'CustomerController@getappointments')->name('customer.getappointments');
+Route::get('/customer/getcurrentappointments', 'CustomerController@getcurrentappointments')->name('customer.getcurrentappointments');
 Route::get('/customer/viewappointmentdetails/{appointment}', 'CustomerController@viewappointmentdetails')->name('customer.viewappointmentdetails');
 Route::get('/customer/addappointment', 'CustomerController@addappointment')->name('customer.addappointment');
 Route::post('/customer/storeappointment', 'CustomerController@storeappointment')->name('customer.storeappointment');
@@ -146,7 +155,11 @@ Route::patch('customer/{appointment}/cancel', 'CustomerController@cancel')->name
 
 //grossincome
 Route::get('/grossincome', 'GrossIncomeController@index')->name('grossincome.index');
+Route::get('grossincome/byworker', 'GrossIncomeController@byworker')->name('grossincome.byworker');
 
-//Route::post('worker/bookappointment', 'WorkerController@bookappointment')->name('worker.bookappointment');
+//reports
+Route::get('/reports', 'ReportsController@index')->name('reports.index');
+Route::get('/reports/workerperformance', 'ReportsController@workerperformance')->name('reports.workerperformance');
+//Route::get('reports/projectedincome', 'ReportsController@index')->name('reports.projectedincome');
 
 

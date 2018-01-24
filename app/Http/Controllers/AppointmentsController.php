@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests\CreateAppointment;
 use App\Http\Requests\RescheduleAppointment;
 use App\Appointment;
+use App\AppointmentTransaction;
 use App\Customer;
 use App\Worker;
 use App\Service;
@@ -46,8 +47,16 @@ class AppointmentsController extends Controller
         ->addColumn('id', function($appointment){
             return $appointment->id;
         })
-        ->addColumn('datetime', function($appointment){
-            return date('M d, Y h:i A', strtotime($appointment->appointDateTime));
+        ->addColumn('date', function($appointment){
+            return date
+            ('M d, Y', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('time', function($appointment){
+            return date
+            ('h:i A', strtotime($appointment->appointDateTime));
+        })
+        ->addColumn('timeend', function($appointment){
+            return date('h:i A', strtotime('+'.$appointment->service->serviceduration.' minutes', strtotime($appointment->appointDateTime)));
         })
         ->addColumn('customername', function($appointment){
             return $appointment->customer->custlname.", ".$appointment->customer->custfname;
@@ -57,9 +66,6 @@ class AppointmentsController extends Controller
         })
         ->addColumn('service', function($appointment){
             return $appointment->service->servicename;
-        })
-        ->addColumn('status', function($appointment){
-            return $appointment->appointStatus;
         })
         ->addColumn('action', function ($appointment){
             return '
@@ -110,6 +116,32 @@ class AppointmentsController extends Controller
                         <span class="glyphicon glyphicon-search"></span>
                     </button>';
         })
+        ->make(true);
+    }
+
+    public function get_datatable_appointtransaction()
+    {
+        $appointtrans = \App\AppointmentTransaction::all();
+
+        return Datatables::of($appointtrans)
+        ->addColumn('appointmentid', function($appointtran){
+            return $appointtran->appointment_id;
+        })
+        ->addColumn('transactionid', function($appointtran){
+            return $appointtran->transaction_id;
+        })
+        ->addColumn('customername', function($appointtran){
+            return $appointtran->appointment->customer->custlname.", ".$appointtran->appointment->customer->custfname;
+        })
+        ->addColumn('workername', function($appointtran){
+            return $appointtran->appointment->worker->workerlname.", ".$appointtran->appointment->worker->workerfname;
+        })
+        ->addColumn('service', function($appointtran){
+            return $appointtran->appointment->service->servicename;
+        })
+        ->addColumn('amount', function($appointtran){
+            return $appointtran->appointment->service->serviceprice;
+        }) 
         ->make(true);
     }
 
@@ -195,6 +227,11 @@ class AppointmentsController extends Controller
 
     $formatted = date('Y-m-d H:i:s', strtotime($request->appointDateTime));
     $requestdaytoday    = date('D', strtotime($request->appointDateTime));
+
+    if($request->agree != 1)
+    {
+        return response()->json(['success' => false, 'msg' => 'You have to agree with the Terms and Condition before proceeding.']);
+    }
 
   if($service->servicename == "Hair Rebond")
   {

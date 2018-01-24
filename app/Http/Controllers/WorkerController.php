@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use DB;
+use App\TransactionDetail;
+use App\Worker;
 use Yajra\DataTables\Facades\Datatables;
 
 class WorkerController extends Controller
@@ -177,6 +180,75 @@ class WorkerController extends Controller
         })
          ->addColumn('bill', function($transactiondetail){
             return $transactiondetail->transaction->transactBill;
+        })
+        ->make(true);
+    }
+
+    public function mygrossincome()
+    {
+        return view('worker.mygrossincome');
+    }
+
+     public function getgrossincome(Request $request)
+    {
+        if($request->choice == 1)
+        {   
+                $grossincomes = \App\TransactionDetail::
+                join('workers', 'transaction_details.worker_id', '=', 'workers.id')
+                ->select(['workers.id as id', 'workers.workerfname as firstname', 'workers.workerlname as lastname', DB::raw('COUNT(transaction_details.transaction_id) as transactioncount'), DB::raw('SUM(transaction_details.workergrossincome) as grossincome')])
+                ->groupBy('workers.id')
+                ->where('workers.id', Auth::user()->id)
+                ->whereYear('transaction_details.created_at', '=', $request->year)
+                ->get();
+        }
+        else if($request->choice == 2)
+        { 
+            $grossincomes = \App\TransactionDetail::
+                join('workers', 'transaction_details.worker_id', '=', 'workers.id')
+                ->select(['workers.id as id', 'workers.workerfname as firstname', 'workers.workerlname as lastname', DB::raw('COUNT(transaction_details.transaction_id) as transactioncount'), DB::raw('SUM(transaction_details.workergrossincome) as grossincome')])
+                ->groupBy('workers.id')
+                ->where('workers.id', Auth::user()->id)
+                ->whereYear('transaction_details.created_at', '=', $request->year)
+                ->whereMonth('transaction_details.created_at', '=', $request->month)
+                ->get();
+        }
+        else if($request->choice == 3)
+        {
+            $grossincomes = \App\TransactionDetail::
+                join('workers', 'transaction_details.worker_id', '=', 'workers.id')
+                ->select(['workers.id as id', 'workers.workerfname as firstname', 'workers.workerlname as lastname', DB::raw('COUNT(transaction_details.transaction_id) as transactioncount'), DB::raw('SUM(transaction_details.workergrossincome) as grossincome')])
+                ->groupBy('workers.id')
+                ->where('workers.id', Auth::user()->id)
+                ->whereDate('transaction_details.created_at', '=', $request->date1)
+                ->get();
+        }
+        else
+        {
+            $grossincomes = \App\TransactionDetail::
+                join('workers', 'transaction_details.worker_id', '=', 'workers.id')
+                ->select(['workers.id as id', 'workers.workerfname as firstname', 'workers.workerlname as lastname', DB::raw('COUNT(transaction_details.transaction_id) as transactioncount'), DB::raw('SUM(transaction_details.workergrossincome) as grossincome')])
+                ->groupBy('workers.id')
+                ->where('workers.id', Auth::user()->id)
+                ->whereDate('transaction_details.created_at', '>=', $request->date1)
+                ->whereDate('transaction_details.created_at', '<=', $request->date2)
+                ->get();
+        }
+
+        return Datatables::of($grossincomes)
+        ->addColumn('id', function($grossincome){
+            return $grossincome->id;
+        })
+        ->addColumn('firstname', function($grossincome){
+            return $grossincome->firstname;
+        })
+        ->addColumn('lastname', function($grossincome){
+            return $grossincome->lastname;
+        })
+        ->addColumn('transactioncount', function($grossincome){
+            return $grossincome->transactioncount;
+        })
+        ->addColumn('grossincome', function($grossincome){
+            return '₱ '.number_format($grossincome->grossincome, 2, '.', ',');
         })
         ->make(true);
     }

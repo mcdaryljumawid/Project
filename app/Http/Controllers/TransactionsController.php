@@ -145,7 +145,7 @@ class TransactionsController extends Controller
                 'availability' => 0,
             ]);
 
-            return response()->json(['success' => true, 'msg' => 'Transaction from Successfully Created!']);
+            return response()->json(['success' => true, 'msg' => 'Walk-in Transaction Successfully Created!']);
         }else{
              return response()->json(['success' => false, 'msg' => 'Transaction Not Created!']);
         }
@@ -291,9 +291,13 @@ class TransactionsController extends Controller
     public function adddetailsform($id)
     {
         $transaction = Transaction::findorFail($id);
+        $serviceids   = TransactionDetail::
+                             select('service_id')
+                            ->where('transaction_id', $id)
+                            ->get();
+
         $services = Service::all();
         $workers = Worker::all();
-
         return view('transactions.adddetailsform', compact(['services', 'workers', 'transaction']));
     }
 

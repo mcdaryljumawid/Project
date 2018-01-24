@@ -13,7 +13,9 @@
 </div>
 
 <div>
-<button class="add-data-btn btn btn-success">Add User</button>
+<div align="center">
+  <button class="add-data-btn btn btn-success">Add User</button>
+</div>
 <table id="users-table" class="table" style="font-size: 15px;">
 	<thead style="font-weight: bold;">
 		<tr>
@@ -50,6 +52,9 @@
               sServerMethod: "GET",
               dom: 'Bfrtip',
                 buttons: [
+                {
+                  extend: 'pageLength'
+                },
                 {
                   extend: 'copy',
                   exportOptions:{

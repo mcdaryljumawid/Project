@@ -1,12 +1,12 @@
 @extends('layouts.master')
 <!--@include('script')-->
 @section('title')
-	Gross Income | Moley Boley Online Appointment and Operations Management System
+	Worker Breakdown | Moley Boley Online Appointment and Operations Management System
 @endsection
 @include('script')
 <br><br><br>
 <div class="container">
- <form class="form-horizontal" method="GET" action="/grossincome/getgrossincome" id="grossincome-form">
+ <form class="form-horizontal" method="GET" action="/grossincome/getbyworker" id="byworker-form">
   
   <div class="row">
       <div class = "col-md-2">
@@ -20,6 +20,19 @@
           </select>
         </div>
       </div>
+  </div>
+
+
+  <div class="form-group">
+        <label class ="control-label col-sm-4">Worker</label>
+                <div class="col-sm-7">
+                      <select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
+                            @foreach($workers as $worker)
+                              <option value="{{ $worker->id }}">{{ $worker->workerlname }}, {{ $worker->workerfname }}</option>
+                            @endforeach
+                      </select>
+        <span class="help-text text-danger"></span>
+                </div>
   </div>
 
   <div class="row">
@@ -72,19 +85,20 @@
 
 <div class="row">
 <div class = "col-md-2">
-  <button class="submit-btn btn btn-success">View gross income</button>
+  <button class="submit-data-btn btn btn-success">View Worker Breakdown</button>
 </div>
 </div>
 
 <div>
-<table id="grossincome-table" class="table" style="font-size: 15px; display:none;">
+<table id="byworker-table" class="table" style="font-size: 15px; display:none;">
   <thead style="font-weight: bold;">
     <tr>
-        <td>Worker ID</td>
-        <td>Firstname</td>
-        <td>Lastname</td>
-        <td>Number of Transactions</td>
-        <td>Accumulated Gross Income</td>
+        <td>Transaction No.</td>
+        <td>Worker No.</td>
+        <td>Worker Name</td>
+        <td>Date and Time</td>
+        <td>Service Rendered</td>
+        <td>Gross income</td>
     </tr>
 </thead>
 </table>
@@ -119,11 +133,12 @@
 });
 
   $(function(){
-    $(document).off('click','.submit-btn').on('click','.submit-btn', function(e){
+    $(document).off('click','.submit-data-btn').on('click','.submit-data-btn', function(e){
         e.preventDefault();
-          var $form = $('#grossincome-form');
+          var $form = $('#byworker-form');
           var $url = $form.attr('action');
           var choice = document.getElementById("choice").value;
+          var worker_id = document.getElementById("worker_id").value;
           var year = document.getElementById("year").value;
           var month = document.getElementById("month").value;
           var date1 = document.getElementById("date1").value;
@@ -131,10 +146,10 @@
           $.ajax({
             type: 'GET',
             url: $url,
-            data: $("#grossincome-form").serialize(), 
+            data: $("#byworker-form").serialize(), 
           });
           $(function() {
-          $('#grossincome-table').DataTable({
+          $('#byworker-table').DataTable({
               bProcessing: true,
               bServerSide: false,
               sServerMethod: "GET",
@@ -146,36 +161,41 @@
                 },
                 {
                   extend: 'copy',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Gross Income Worker Breakdown'
                 },
                 {
                   extend: 'excel',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Gross Income Worker Breakdown'
                 },
                 {
                   extend: 'pdf',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Gross Income Worker Breakdown'
                 },
                 {
                   extend: 'print',
-                  title: 'Moley Boley | Gross Income'
+                  title: 'Moley Boley | Gross Income Worker Breakdown'
                 },
                 ],
             ajax:{ 
-              url: '/grossincome/getgrossincome?choice='+choice+'&year='+year+'&month='+month+'&date1='+date1+'&date2='+date2+'',
+              url: '/grossincome/getbyworker?choice='+choice+'&worker_id='+worker_id+'&year='+year+'&month='+month+'&date1='+date1+'&date2='+date2+'',
               },
+           /* drawCallback: function () {
+            var api = this.api();
+            $( api.table().footer(5) ).html(
+            api.column(5).data().sum()
+            );
+            },*/
             columns: [
-                {data: 'id', name: 'id', className: 'col-md-1 text-left', orderable: false},
-                {data: 'firstname', name: 'firstname', className: 'col-md-1 text-left', orderable: false},
-                {data: 'lastname', name: 'lastname', className: 'col-md-1 text-left', orderable: false},
-                {data: 'transactioncount', name: 'transactioncount', className: 'col-md-1 text-left', orderable: false},
+                {data: 'transactionno', name: 'transactionno', className: 'col-md-1 text-left', orderable: false},
+                {data: 'workerno', name: 'workerno', className: 'col-md-1 text-left', orderable: false},
+                {data: 'workername', name: 'workername', className: 'col-md-1 text-left', orderable: false},
+                {data: 'datetime', name: 'datetime', className: 'col-md-1 text-left', orderable: false},
+                {data: 'service', name: 'service', className: 'col-md-1 text-left', orderable: false},
                 {data: 'grossincome', name: 'grossincome', className: 'col-md-1 text-left', orderable: false},
             ],
           });   
         }); 
-
-      //    $("#grossincome-table").DataTable().ajax.url('/grossincome/getgrossincome').load(); 
-          $("#grossincome-table").show();
+          $("#byworker-table").show();
           
     });
    });  

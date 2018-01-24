@@ -48,8 +48,7 @@
                 {data: 'service', name: 'service', className: 'col-md-1 text-left'},
                 {data: 'bill', name: 'bill', className: 'col-md-1 text-left'},
             ],
-        });
-//call the modal from the triggering button    
+        });   
     });
 </script>
 </div>

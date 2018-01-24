@@ -14,7 +14,7 @@
         				 <div class="form-group">
                             <label class ="control-label col-sm-4">Service Category</label>
                             <div class="col-sm-7">
-                            	<select class="select form-control " id="select_servicecategory" name="servicecategory" style="width: 200px">
+                            	<select class="select form-control " id="select_servicecategory_add" name="servicecategory" style="width: 200px">
                                 	<option value="Hair">Hair</option>
                                     <option value="Threading">Threading</option>
                                     <option value="Nails">Nails</option>
@@ -29,7 +29,7 @@
 						<div class="form-group">
                             <label class ="control-label col-sm-4">Service</label>
                             <div class="col-sm-7">
-                            	<select class="select form-control " id="service_id" name="service_id" style="width: 200px">
+                            	<select class="select form-control " id="service_id_add" name="service_id" style="width: 200px">
                                 </select>
 								<span class="help-text text-danger"></span>
                             </div>
@@ -38,7 +38,8 @@
                         <div class="form-group">
                             <label class ="control-label col-sm-4">Worker</label>
                             <div class="col-sm-7">
-                            	<select class="select form-control " id="worker_id" name="worker_id" style="width: 200px">
+                            	<select class="select form-control " id="worker_id_add" name="worker_id" style="width: 200px">
+                            		<option disabled selected><i>Choose a worker</i></option>
                             		<!--@foreach($workers as $worker)
                                 		<option value="{{ $worker->id }}">{{ $worker->workerlname }}, {{ $worker->workerfname }}</option>
                                 	@endforeach-->
@@ -97,7 +98,7 @@
 		});
 	 });
 
-	$('#select_servicecategory').change(function(){
+	$('#select_servicecategory_add').change(function(){
       var servicecategory = $(this).val();
       var that = this;
       var token = $("input[name='_token']").val();
@@ -110,11 +111,11 @@
 	          }
 	      });
 	  });
-	 $('#select_servicecategory').change();
+	 $('#select_servicecategory_add').change();
 	
 
 	function getWorkers(){
-		$('#service_id').change(function(){
+		$('#service_id_add').change(function(){
 	      var service_id = $(this).val();
 	      var that = this;
 	      var token = $("input[name='_token']").val();
@@ -130,5 +131,7 @@
 		  });
 	}
 	getWorkers();
+	$('#select_id_add').change();
+	
 	
 </script>

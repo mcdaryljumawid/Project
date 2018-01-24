@@ -1,4 +1,4 @@
-@extends('layouts.master')
+  @extends('layouts.master')
 @section('title')
 	Manage Workers | Moley Boley Online Appointment and Operations Management System
 @endsection
@@ -57,8 +57,7 @@
             dom: 'Bfrtip',
                 buttons: [
                 {
-                  extend: 'pageLength',
-                  title: 'Moley Boley | Workers'
+                  extend: 'pageLength'
                 },
                 {
                   extend: 'copy',

@@ -31,7 +31,6 @@ class CreateAppointment extends FormRequest
         'service_id'            => 'required',
         'worker_id'             => 'required',
         'customer_id'           => 'required',
-        'agree'                 => 'required',
         ];
     }
 
